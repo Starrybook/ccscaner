@@ -1,0 +1,7 @@
+.vscode/
+.vscode/*
+.draft/
+.draft/*
+doc/record.md
+res/repos-info/*
+res/feature-tables/*
