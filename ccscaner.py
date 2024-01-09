@@ -34,17 +34,19 @@ class Scanner:
         self.cursor = self.tree.walk()
         self.root = self.tree.root_node
         # feature table
-        self.cctable = FeatureTable()
+        self.cctable = FeatureTable(DEBUG_MODE, STORE_FEATURE_TABLE, FEATURE_TABLE_PATH,
+                                    STORE_DETAILED_INFO, DETAILED_INFO_PATH)
     
     def run(self) -> None:
         self.find_template_definitions()
         self.find_lambda_definitions()
         self.find_namespace_definitions()
+        # TODO
         # print the result
         # if not STORE_FEATURE_TABLE:
-        self.print_feature_table()
+        self.cctable.print_feature_table()
         # store the result
-        self.store_csv()
+        self.cctable.store_csv()
 
     def find_template_definitions(self):
         # Create a query

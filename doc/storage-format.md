@@ -12,9 +12,13 @@
 
 file_name.csv
 
-| Feature name | Class name   | Function name | Content |
-| ------------ | ------------ | ------------- | ------- |
-| string 'xxx' | string 'xxx' | string 'xxx'  | b'xxx'  |
+| Feature name | Location             | Class name   | Function name | Content |
+| ------------ | -------------------- | ------------ | ------------- | ------- |
+| string 'xxx' | string '(x,x)-(x,x)' | string 'xxx' | string 'xxx'  | b'xxx'  |
+
+>   Location: `str(node.start_point)+'-'+str(node.end_point)`.
+>
+>   Content: can be the text of definition, or anything else. flexible.
 
 
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # untested
+# this file will be rewritten after most functions of ccscaner have been implemented
 
-# Initialize variables
 DEBUG=true
 STORE_FEATURE_TABLE=false
 STORE_DETAILED_INFO=false
