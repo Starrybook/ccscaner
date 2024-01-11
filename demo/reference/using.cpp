@@ -1,15 +1,20 @@
-#include <iostream>
-#include <vector>
+namespace A
+{
+    void g();
+}
 
-// 使用 using 关键字定义别名
-using Vec = std::vector<int>;
-
-int main() {
-    Vec v = {1, 2, 3, 4, 5};
-
-    for (const auto& i : v) {
-        std::cout << i << " ";
-    }
-
-    return 0;
+namespace X
+{
+    using A::g; // A::g 现在作为 ::X::g 可见
+}
+class B
+{protected:
+    int m; // B::m 是受保护的
+};
+class D : B {
+    using B::m; // D::m 是公开的
+};
+void h()
+{
+    X::g(); // 调用 A::g
 }
