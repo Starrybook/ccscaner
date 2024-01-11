@@ -3,6 +3,7 @@ import sys
 import os
 import pandas as pd
 
+SRC_FILE_PATH = ""
 DEBUG_MODE = False
 STORE_FEATURE_TABLE = False
 STORE_DETAILED_INFO = False
@@ -10,11 +11,12 @@ FEATURE_TABLE_PATH = ""
 DETAILED_INFO_PATH = ""
 
 class FeatureTable:
-    def __init__(self, debug_mode, store_feature_table, feature_table_path, 
-                 store_detailed_info, detailed_info_path) -> None:
+    def __init__(self, src_file_path, debug_mode, store_feature_table, 
+                 feature_table_path, store_detailed_info, detailed_info_path) -> None:
         # global variables
-        global DEBUG_MODE, STORE_FEATURE_TABLE, FEATURE_TABLE_PATH
-        global STORE_DETAILED_INFO, DETAILED_INFO_PATH
+        global SRC_FILE_PATH, DEBUG_MODE, STORE_FEATURE_TABLE
+        global FEATURE_TABLE_PATH, STORE_DETAILED_INFO, DETAILED_INFO_PATH
+        SRC_FILE_PATH = src_file_path
         DEBUG_MODE = debug_mode
         STORE_FEATURE_TABLE = store_feature_table
         FEATURE_TABLE_PATH = feature_table_path
@@ -131,9 +133,8 @@ class FeatureTable:
                 table_frame_old.to_csv(FEATURE_TABLE_PATH, index=False)
         if STORE_DETAILED_INFO:
             # Repo name | File name | Location | Content
-            dir_basename = os.path.basename(DETAILED_INFO_PATH)
+            dir_basename_nosuffix = os.path.splitext(os.path.basename(FEATURE_TABLE_PATH))[0]
             assert(STORE_FEATURE_TABLE) # needed
-            file_basename = os.path.basename(FEATURE_TABLE_PATH)
             # write to DETAILED_INFO_PATH
             for key in self.table:
                 for list in self.table[key]:
@@ -143,11 +144,11 @@ class FeatureTable:
                         print('Now writing to', DETAILED_INFO_PATH+key+'_'+list, '...')
                     # if the file is empty, then write the header first
                     if os.path.getsize(DETAILED_INFO_PATH+key+'_'+list+'.csv') == 0:
-                        with open(DETAILED_INFO_PATH+key+'_'+list, 'a', newline='') as csvfile:
+                        with open(DETAILED_INFO_PATH+key+'_'+list+'.csv', 'a', newline='') as csvfile:
                             writer = csv.writer(csvfile)
                             writer.writerow(['Repo name', 'File name', 'Location', 'Content'])
                     with open(DETAILED_INFO_PATH+key+'_'+list+'.csv', 'a', newline='') as csvfile:
                         for item in self.table[key][list]:
                             writer = csv.writer(csvfile)
-                            writer.writerow([dir_basename, file_basename, item[0], item[1]])
+                            writer.writerow([dir_basename_nosuffix, SRC_FILE_PATH, item[0], item[1]])
         return
