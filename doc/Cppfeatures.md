@@ -11,7 +11,7 @@ _Categories of language features in C++_
 |  Concurrency &Multithreading   | thread_local | | 变量声明为线程存储期 |          |
 ||votatile||多任务共享变量、多线程并发访问变量修饰||
 |       Memory Management        |析构函数~function| | 当一个对象被删除或离开其作用域时，会自动调用其析构函数进行资源回收        |          |
-||Smart Pointers||shared_ptr/unique_ptr/weak_ptr/auto_ptr<br>(通过指针释放对象可能造成内存泄漏)||
+||Smart Pointers||shared_ptr/unique_ptr/weak_ptr<br>(通过指针释放对象可能造成内存泄漏)||
 ||直接初始化:T 对象 ( 实参 )||从明确的构造函数实参的集合初始化对象，无需右值复制||
 |   Exception Handling  |        Try-Catch Blocks || catch 语句捕捉 try 块中抛出的特性异常（std::exception） |   |
 ||noexcept 说明符||noexcept 是一个函数后缀，指示该函数是否可能抛出异常，减少不必要的异常处理开销||
