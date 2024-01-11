@@ -5,8 +5,6 @@ __pycache__/*
 .draft/
 .draft/*
 doc/record.md
-res/repos-info/*
-!res/repos-info/.gitkeep
-res/feature-tables/*
-!res/feature-tables/.gitkeep
+res/repos-info/*.csv
+res/feature-tables/*.csv
 *.csv

@@ -1,6 +1,5 @@
 import tree_sitter
 from tree_sitter import Language, Parser
-import csv
 import sys
 import os
 from cctable import FeatureTable
@@ -38,57 +37,142 @@ class Scanner:
                                     STORE_DETAILED_INFO, DETAILED_INFO_PATH)
     
     def run(self) -> None:
-        self.find_template_definitions()
-        self.find_lambda_definitions()
-        self.find_namespace_definitions()
-        # TODO
+        if DEBUG_MODE:
+            print('>---------------------------------------------------------------------------')
+        # run all the find_XXX() functions
+        for key in self.cctable.table:
+            for list in self.cctable.table[key]:
+                method_name = 'find_' + key + '_' + list
+                method = getattr(self, method_name, None)
+                if method and callable(method):
+                    try:
+                        method()
+                    except (AttributeError, TypeError) as e:
+                        print(f'In Scanner.run(), {method_name}() failed with error: {str(e)}')
+                else:
+                    print(f'In Scanner.run(), {method_name}() does not exist')
+        if DEBUG_MODE:
+            print('---------------------------------------------------------------------------<')
         # print the result
-        # if not STORE_FEATURE_TABLE:
-        self.cctable.print_feature_table()
+        if DEBUG_MODE:
+            self.cctable.print_detailed_feature_table()
         # store the result
         self.cctable.store_csv()
 
-    def find_template_definitions(self):
+    #####################################################################################
+    """ ------------------- Here are the find_XXX() functions ----------------------- """
+    #####################################################################################
+
+    def find_TEMPLATE_stl(self):
+        pass
+
+    def find_TEMPLATE_template(self):
         # Create a query
         query = CPP_LANGUAGE.query("""(template_declaration) @template_declaration""")
         # Run the query
         captures = query.captures(self.root)
         # print the result
         if DEBUG_MODE:
-            print('In find_template_definitions, captures: ')
+            print('In find_TEMPLATE_template, captures: ')
         for capture in captures:
             if DEBUG_MODE:
-                print('\t', capture[0].type, ' : ', capture[1])
+                print('\t└──', capture[0].type, ' : ', capture[1])
             if capture[1] == 'template_declaration':
-                self.cctable.table["MODULAR"]["template"].append(
-                    self.root.text[capture[0].start_byte : capture[0].end_byte])
+                location = str(capture[0].start_byte) + '-' + str(capture[0].end_byte)
+                content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                self.cctable.table["TEMPLATE"]["template"].append((location, content))
     
-    def find_lambda_definitions(self):
+    def find_TEMPLATE_lambda(self):
         query = CPP_LANGUAGE.query("""(lambda_expression) @lambda_expression""")
         captures = query.captures(self.root)
         if DEBUG_MODE:
-            print('In find_lambda_definitions, captures: ')
+            print('In find_TEMPLATE_lambda, captures: ')
         for capture in captures:
             if DEBUG_MODE:
-                print('\t', capture[0].type, ' : ', capture[1])
+                print('\t└──', capture[0].type, ' : ', capture[1])
             if capture[1] == 'lambda_expression':
-                self.cctable.table["MODULAR"]["lambda"].append(
-                    self.root.text[capture[0].start_byte : capture[0].end_byte])
+                location = str(capture[0].start_byte) + '-' + str(capture[0].end_byte)
+                content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                self.cctable.table["TEMPLATE"]["lambda"].append((location, content))
     
-    def find_namespace_definitions(self):
+    def find_TEMPLATE_namespace(self):
         # Create a query
         query = CPP_LANGUAGE.query("""(namespace_definition) @namespace_definition""")
         # Run the query
         captures = query.captures(self.root)
         # print the result
         if DEBUG_MODE:
-            print('In find_namespace_definitions, captures: ')
+            print('In find_TEMPLATE_namespace, captures: ')
         for capture in captures:
             if DEBUG_MODE:
-                print('\t', capture[0].type, ' : ', capture[1])
+                print('\t└──', capture[0].type, ' : ', capture[1])
             if capture[1] == 'namespace_definition':
-                self.cctable.table["MODULAR"]["namespace"].append(
-                    self.root.text[capture[0].start_byte : capture[0].end_byte])
+                location = str(capture[0].start_byte) + '-' + str(capture[0].end_byte)
+                content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                self.cctable.table["TEMPLATE"]["namespace"].append((location, content))
+    
+    def find_TEMPLATE_macroconcat(self):
+        pass
+
+    def find_CONCURRENCY_thread_local(self):
+        pass
+
+    def find_CONCURRENCY_votatile(self):
+        pass
+
+    def find_MEMORY_destructor(self):
+        pass
+
+    def find_MEMORY_smartptr(self):
+        pass
+
+    def find_MEMORY_directinit(self):
+        pass
+
+    def find_EXCEPTION_trycatch(self):
+        pass
+
+    def find_EXCEPTION_noexcept(self):
+        pass
+
+    def find_POLYMORPHISM_nestedclass(self):
+        pass
+
+    def find_POLYMORPHISM_operator(self):
+        pass
+
+    def find_POLYMORPHISM_virtual_overload(self):
+        pass
+
+    def find_POLYMORPHISM_castconvert(self):
+        pass
+
+    def find_REFERENCE_friend(self):
+        pass
+
+    def find_REFERENCE_this(self):
+        pass
+
+    def find_REFERENCE_using(self):
+        pass
+
+    def find_FUNCTION_typedef(self):
+        pass
+
+    def find_TYPESYS_typedef(self):
+        pass
+
+    def find_TYPESYS_union(self):
+        pass
+
+    def find_TYPESYS_decltype(self):
+        pass
+
+    def find_TYPESYS_using(self):
+        pass
+
+    def find_TYPESYS_constexpr(self):
+        pass
     
 
 

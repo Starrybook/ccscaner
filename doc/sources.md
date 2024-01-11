@@ -18,5 +18,8 @@ c++在`tree-sitter`中的语法定义文件：`doc/grammar.js`
 
 
 
-`query usage`：[query-syntax](https://tree-sitter.github.io/tree-sitter/using-parsers#query-syntax)
+`query usage`：
 
+[query-syntax](https://tree-sitter.github.io/tree-sitter/using-parsers#query-syntax)
+
+[py-tree-sitter query usage](https://github.com/tree-sitter/py-tree-sitter?tab=readme-ov-file#pattern-matching)

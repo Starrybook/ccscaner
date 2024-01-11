@@ -10,25 +10,24 @@
 
 #### Detailed info
 
-file_name.csv
+`feature_full_name.csv:`
 
-| Feature name | Location             | Class name   | Function name | Content |
-| ------------ | -------------------- | ------------ | ------------- | ------- |
-| string 'xxx' | string '(x,x)-(x,x)' | string 'xxx' | string 'xxx'  | b'xxx'  |
+| Repo name    | File name    | Location             | Content |
+| ------------ | ------------ | -------------------- | ------- |
+| string 'xxx' | string 'xxx' | string '(x,x)-(x,x)' | b'xxx'  |
+
 
 >   Location: `str(node.start_point)+'-'+str(node.end_point)`.
 >
->   Content: can be the text of definition, or anything else. flexible.
+>   Content: can be the text of definition, or anything else. **flexible**.
 
 
 
-#### Another approach
-
->   not decide yet
-
-feature_name.csv
-
-| File name    | Class name   | Function name | Content |
-| ------------ | ------------ | ------------- | ------- |
-| string 'xxx' | string 'xxx' | string 'xxx'  | b'xxx'  |
-
+>
+>   #### Detailed info (abandoned method)
+>
+>   file_name.csv
+>
+>   | Feature name | Location             | Class name   | Function name | Content |
+>   | ------------ | -------------------- | ------------ | ------------- | ------- |
+>   | string 'xxx' | string '(x,x)-(x,x)' | string 'xxx' | string 'xxx'  | b'xxx'  |
