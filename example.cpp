@@ -1,24 +1,26 @@
 #include <iostream>
-#include <string>
-#include <thread>
-#include <mutex>
-#include <pthread.h>
- 
-thread_local unsigned int rage = 1; 
-std::mutex cout_mutex;
- 
-void increase_rage(const std::string& thread_name)
-{
-    ++rage; // 在锁外修改 OK；这是线程局部变量
-    std::lock_guard<std::mutex> lock(cout_mutex);
-    std::cout << thread_name << " 的愤怒计数：" << rage << '\n';
-}
- 
-int main()
-{
-    std::thread a(increase_rage, "a"), b(increase_rage, "b");
-    std::lock_guard<std::mutex> lock(cout_mutex);
-    std::cout << "main 的愤怒计数：" << rage << '\n';
-    a.join();
-    b.join();
+
+class VolatileExample {
+public:
+    VolatileExample(int data) : data(data) {}
+
+    // Volatile member function representing a restricted interface
+    void printData() const volatile {
+        std::cout << "Legal access: " << data << std::endl;
+    }
+
+private:
+    int data;
+};
+
+int main() {
+    // Creating a volatile object of VolatileExample
+    VolatileExample volatileObj(42);
+    // Accessing the restricted interface
+    volatileObj.printData();
+    // Using const_cast to obtain full access to the class interface
+    const VolatileExample& constRefObj = volatileObj;
+    const_cast<VolatileExample&>(constRefObj).printData();
+
+    return 0;
 }

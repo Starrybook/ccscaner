@@ -34,7 +34,7 @@ class FeatureTable:
         self.table["TEMPLATE"]["macroconcat"] = []
         self.table["CONCURRENCY"] = {}
         self.table["CONCURRENCY"]["thread_local"] = []
-        self.table["CONCURRENCY"]["votatile"] = []
+        self.table["CONCURRENCY"]["volatile"] = []
         self.table["MEMORY"] = {}
         self.table["MEMORY"]["destructor"] = []
         self.table["MEMORY"]["smartptr"] = []
