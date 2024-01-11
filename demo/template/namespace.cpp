@@ -1,6 +1,13 @@
-namespace MyNamespace {
-    void printNumber() {}
+namespace Q
+{
+    namespace V
+    {
+        void f();
+    }
+    void V::f() {}
+    namespace V
+    {
+        void g();
+    }
 }
-int main() {
-    MyNamespace::printNumber();
-}
+void Q::V::g() {}
