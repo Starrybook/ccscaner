@@ -33,8 +33,8 @@ class Scanner:
         self.cursor = self.tree.walk()
         self.root = self.tree.root_node
         # feature table
-        self.cctable = FeatureTable(DEBUG_MODE, STORE_FEATURE_TABLE, FEATURE_TABLE_PATH,
-                                    STORE_DETAILED_INFO, DETAILED_INFO_PATH)
+        self.cctable = FeatureTable(SRC_FILE_PATH, DEBUG_MODE, STORE_FEATURE_TABLE, 
+                                    FEATURE_TABLE_PATH, STORE_DETAILED_INFO, DETAILED_INFO_PATH)
     
     def run(self) -> None:
         if DEBUG_MODE:
