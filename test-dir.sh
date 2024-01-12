@@ -83,7 +83,7 @@ if [[ $STORE_DETAILED_INFO == "-d" ]]; then
     touch ./res/repos-info/TEMPLATE_namespace.csv
     touch ./res/repos-info/TEMPLATE_macroconcat.csv
     touch ./res/repos-info/CONCURRENCY_thread_local.csv
-    touch ./res/repos-info/CONCURRENCY_votatile.csv
+    touch ./res/repos-info/CONCURRENCY_volatile.csv
     touch ./res/repos-info/MEMORY_destructor.csv
     touch ./res/repos-info/MEMORY_smartptr.csv
     touch ./res/repos-info/MEMORY_directinit.csv

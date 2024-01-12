@@ -46,6 +46,8 @@ class Scanner:
                 method = getattr(self, method_name, None)
                 if method and callable(method):
                     try:
+                        if DEBUG_MODE:
+                            print('In find_' + key + '_' + list + ', captures: ')
                         method()
                     except (AttributeError, TypeError) as e:
                         print(f'In Scanner.run(), {method_name}() failed with error: {str(e)}')
@@ -59,10 +61,19 @@ class Scanner:
         # store the result
         self.cctable.store_csv()
 
+    def show_capture_info_in_debug_mode(self, capture: tuple[tree_sitter.Node, str], location: str, content: str) -> None:
+        if DEBUG_MODE:
+            print('\t└──', capture[0].type, ' : ', location)
+            print('\t\t└── : ', content)
+
     #####################################################################################
     """ ------------------- Here are the find_XXX() functions ----------------------- """
     #####################################################################################
 
+    # cctable will crop the byte stream 'content' to no more than 80 bytes before storing it
+    # so don't worry about the length of 'content'
+
+    # TEMPLATE
     def find_TEMPLATE_stl(self):
         pass
 
@@ -71,60 +82,112 @@ class Scanner:
         query = CPP_LANGUAGE.query("""(template_declaration) @template_declaration""")
         # Run the query
         captures = query.captures(self.root)
-        # print the result
-        if DEBUG_MODE:
-            print('In find_TEMPLATE_template, captures: ')
         for capture in captures:
-            if DEBUG_MODE:
-                print('\t└──', capture[0].type, ' : ', capture[1])
             if capture[1] == 'template_declaration':
-                location = str(capture[0].start_byte) + '-' + str(capture[0].end_byte)
+                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
                 content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["TEMPLATE"]["template"].append((location, content))
     
     def find_TEMPLATE_lambda(self):
         query = CPP_LANGUAGE.query("""(lambda_expression) @lambda_expression""")
         captures = query.captures(self.root)
-        if DEBUG_MODE:
-            print('In find_TEMPLATE_lambda, captures: ')
         for capture in captures:
-            if DEBUG_MODE:
-                print('\t└──', capture[0].type, ' : ', capture[1])
             if capture[1] == 'lambda_expression':
-                location = str(capture[0].start_byte) + '-' + str(capture[0].end_byte)
+                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
                 content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["TEMPLATE"]["lambda"].append((location, content))
     
     def find_TEMPLATE_namespace(self):
-        # Create a query
         query = CPP_LANGUAGE.query("""(namespace_definition) @namespace_definition""")
-        # Run the query
         captures = query.captures(self.root)
-        # print the result
-        if DEBUG_MODE:
-            print('In find_TEMPLATE_namespace, captures: ')
         for capture in captures:
             if DEBUG_MODE:
-                print('\t└──', capture[0].type, ' : ', capture[1])
+                print('\t└──', capture[0].type, ' : ')
             if capture[1] == 'namespace_definition':
-                location = str(capture[0].start_byte) + '-' + str(capture[0].end_byte)
+                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
                 content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["TEMPLATE"]["namespace"].append((location, content))
     
     def find_TEMPLATE_macroconcat(self):
-        pass
+        query = CPP_LANGUAGE.query("""(preproc_arg) @preproc_arg""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            if capture[1] == 'preproc_arg':
+                preproc_text = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                for i in range(len(preproc_text) - len(b'##')):
+                    if preproc_text[i:i+len(b'##')] == b'##':
+                        # here loc_left and loc_right are the location of the '##' in the source file
+                        loc_left = (capture[0].start_point[0] + 1, capture[0].start_point[1] + i + 1)
+                        loc_right = (capture[0].start_point[0] + 1, capture[0].start_point[1] + i + len(b'##') + 1)
+                        location = str(loc_left) + '-' + str(loc_right)
+                        # here content is the full definition of the macro
+                        content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                        self.show_capture_info_in_debug_mode(capture, location, content)
+                        self.cctable.table["TEMPLATE"]["macroconcat"].append((location, content))
 
+    # CONCURRENCY
     def find_CONCURRENCY_thread_local(self):
-        pass
+        query = CPP_LANGUAGE.query("""(storage_class_specifier) @storage_class_specifier""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            if capture[1] == 'storage_class_specifier':
+                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
+                # here we use capture[0].parent.text to get the content of the node
+                content = capture[0].parent.text
+                org_content = capture[0].text
+                if b'thread_local' in org_content:
+                    self.show_capture_info_in_debug_mode(capture, location, content)
+                    self.cctable.table["CONCURRENCY"]["thread_local"].append((location, content))
 
-    def find_CONCURRENCY_votatile(self):
-        pass
+    def find_CONCURRENCY_volatile(self):
+        query = CPP_LANGUAGE.query("""(type_qualifier) @type_qualifier""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            if capture[1] == 'type_qualifier':
+                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
+                # use capture[0].parent.text
+                content = capture[0].parent.text
+                org_content = capture[0].text
+                if b'volatile' in org_content:
+                    self.show_capture_info_in_debug_mode(capture, location, content)
+                    self.cctable.table["CONCURRENCY"]["volatile"].append((location, content))
 
+    # MEMORY
     def find_MEMORY_destructor(self):
-        pass
+        query = CPP_LANGUAGE.query("""(destructor_name) @destructor_name""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            if capture[1] == 'destructor_name':
+                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
+                # use capture[0].parent.text
+                content = capture[0].parent.text
+                org_content = capture[0].text
+                if b'~' in org_content:
+                    self.show_capture_info_in_debug_mode(capture, location, content)
+                    self.cctable.table["MEMORY"]["destructor"].append((location, content))
 
     def find_MEMORY_smartptr(self):
-        pass
+        query = CPP_LANGUAGE.query("""(type_identifier) @type_identifier""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            if capture[1] == 'type_identifier':
+                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
+                # use capture[0].parent.text
+                content = capture[0].parent.text
+                org_content = capture[0].text
+                if b'shared_ptr' in org_content or b'unique_ptr' in org_content:
+                    self.show_capture_info_in_debug_mode(capture, location, content)
+                    self.cctable.table["MEMORY"]["smartptr"].append((location, content))
 
     def find_MEMORY_directinit(self):
         pass

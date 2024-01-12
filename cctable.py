@@ -2,6 +2,7 @@ import csv
 import sys
 import os
 import pandas as pd
+import gc
 
 SRC_FILE_PATH = ""
 DEBUG_MODE = False
@@ -103,8 +104,18 @@ class FeatureTable:
         print(self.feature_count_table)
         print('---------------------------------------------------------------------------<')
 
+    def byte_stream_crop(self) -> None:
+        # crop the byte stream
+        # no more than 80 bytes
+        for key in self.table:
+            for list in self.table[key]:
+                for item in self.table[key][list]:
+                    if len(item[1]) > 80:
+                        item[1] = item[1][:80]
+
     def store_csv(self) -> None:
         # update feature_count first
+        self.byte_stream_crop()
         self.update_count()
         if STORE_FEATURE_TABLE:
             # store feature_num, feature_name, feature_count into FEATURE_TABLE_PATH
@@ -151,4 +162,5 @@ class FeatureTable:
                         for item in self.table[key][list]:
                             writer = csv.writer(csvfile)
                             writer.writerow([dir_basename_nosuffix, SRC_FILE_PATH, item[0], item[1]])
+        gc.collect()
         return
