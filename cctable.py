@@ -86,6 +86,7 @@ class FeatureTable:
     
     def print_detailed_feature_table(self) -> None:
         # print the detailed feature table
+        self.byte_stream_crop() # crop the byte stream first
         print('>---------------------------------------------------------------------------')
         print('feature_table:')
         for key in self.table:
@@ -109,9 +110,9 @@ class FeatureTable:
         # no more than 80 bytes
         for key in self.table:
             for list in self.table[key]:
-                for item in self.table[key][list]:
+                for index, item in enumerate(self.table[key][list]):
                     if len(item[1]) > 80:
-                        item[1] = item[1][:80]
+                        self.table[key][list][index] = (item[0], item[1][:75]+b'...')
 
     def store_csv(self) -> None:
         # update feature_count first

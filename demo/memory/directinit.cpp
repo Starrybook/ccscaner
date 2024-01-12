@@ -20,6 +20,13 @@ int main() {
     int v{42};
     MyClass obj1(42);
     MyClass obj2(obj1);
-    Point p = {3, 7};
+    /* other examples:
+    Point p{3, 7};
+    static_cast<T>(object);
+    auto a = new T(arg);
+    auto f = [arg](arg1){;}
+    auto f = [](arg1){;}
+    class1::class2() : member(arg1, arg2){;}
+    */
     return 0;
 }

@@ -83,114 +83,162 @@ class Scanner:
         # Run the query
         captures = query.captures(self.root)
         for capture in captures:
-            if capture[1] == 'template_declaration':
-                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
-                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
-                content = self.root.text[capture[0].start_byte : capture[0].end_byte]
-                self.show_capture_info_in_debug_mode(capture, location, content)
-                self.cctable.table["TEMPLATE"]["template"].append((location, content))
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["TEMPLATE"]["template"].append((location, content))
     
     def find_TEMPLATE_lambda(self):
         query = CPP_LANGUAGE.query("""(lambda_expression) @lambda_expression""")
         captures = query.captures(self.root)
         for capture in captures:
-            if capture[1] == 'lambda_expression':
-                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
-                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
-                content = self.root.text[capture[0].start_byte : capture[0].end_byte]
-                self.show_capture_info_in_debug_mode(capture, location, content)
-                self.cctable.table["TEMPLATE"]["lambda"].append((location, content))
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["TEMPLATE"]["lambda"].append((location, content))
     
     def find_TEMPLATE_namespace(self):
         query = CPP_LANGUAGE.query("""(namespace_definition) @namespace_definition""")
         captures = query.captures(self.root)
         for capture in captures:
-            if DEBUG_MODE:
-                print('\t└──', capture[0].type, ' : ')
-            if capture[1] == 'namespace_definition':
-                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
-                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
-                content = self.root.text[capture[0].start_byte : capture[0].end_byte]
-                self.show_capture_info_in_debug_mode(capture, location, content)
-                self.cctable.table["TEMPLATE"]["namespace"].append((location, content))
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["TEMPLATE"]["namespace"].append((location, content))
     
     def find_TEMPLATE_macroconcat(self):
         query = CPP_LANGUAGE.query("""(preproc_arg) @preproc_arg""")
         captures = query.captures(self.root)
         for capture in captures:
-            if capture[1] == 'preproc_arg':
-                preproc_text = self.root.text[capture[0].start_byte : capture[0].end_byte]
-                for i in range(len(preproc_text) - len(b'##')):
-                    if preproc_text[i:i+len(b'##')] == b'##':
-                        # here loc_left and loc_right are the location of the '##' in the source file
-                        loc_left = (capture[0].start_point[0] + 1, capture[0].start_point[1] + i + 1)
-                        loc_right = (capture[0].start_point[0] + 1, capture[0].start_point[1] + i + len(b'##') + 1)
-                        location = str(loc_left) + '-' + str(loc_right)
-                        # here content is the full definition of the macro
-                        content = self.root.text[capture[0].start_byte : capture[0].end_byte]
-                        self.show_capture_info_in_debug_mode(capture, location, content)
-                        self.cctable.table["TEMPLATE"]["macroconcat"].append((location, content))
+            preproc_text = self.root.text[capture[0].start_byte : capture[0].end_byte]
+            for i in range(len(preproc_text) - len(b'##')):
+                if preproc_text[i:i+len(b'##')] == b'##':
+                    # here loc_left and loc_right are the location of the '##' in the source file
+                    loc_left = (capture[0].start_point[0] + 1, capture[0].start_point[1] + i + 1)
+                    loc_right = (capture[0].start_point[0] + 1, capture[0].start_point[1] + i + len(b'##') + 1)
+                    location = str(loc_left) + '-' + str(loc_right)
+                    # here content is the full definition of the macro
+                    content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+                    self.show_capture_info_in_debug_mode(capture, location, content)
+                    self.cctable.table["TEMPLATE"]["macroconcat"].append((location, content))
 
     # CONCURRENCY
     def find_CONCURRENCY_thread_local(self):
         query = CPP_LANGUAGE.query("""(storage_class_specifier) @storage_class_specifier""")
         captures = query.captures(self.root)
         for capture in captures:
-            if capture[1] == 'storage_class_specifier':
-                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
-                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
-                # here we use capture[0].parent.text to get the content of the node
-                content = capture[0].parent.text
-                org_content = capture[0].text
-                if b'thread_local' in org_content:
-                    self.show_capture_info_in_debug_mode(capture, location, content)
-                    self.cctable.table["CONCURRENCY"]["thread_local"].append((location, content))
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # here we use capture[0].parent.text to get the content of the node
+            content = capture[0].parent.text
+            org_content = capture[0].text
+            if b'thread_local' in org_content:
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["CONCURRENCY"]["thread_local"].append((location, content))
 
     def find_CONCURRENCY_volatile(self):
         query = CPP_LANGUAGE.query("""(type_qualifier) @type_qualifier""")
         captures = query.captures(self.root)
         for capture in captures:
-            if capture[1] == 'type_qualifier':
-                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
-                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
-                # use capture[0].parent.text
-                content = capture[0].parent.text
-                org_content = capture[0].text
-                if b'volatile' in org_content:
-                    self.show_capture_info_in_debug_mode(capture, location, content)
-                    self.cctable.table["CONCURRENCY"]["volatile"].append((location, content))
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            org_content = capture[0].text
+            if b'volatile' in org_content:
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["CONCURRENCY"]["volatile"].append((location, content))
 
     # MEMORY
     def find_MEMORY_destructor(self):
         query = CPP_LANGUAGE.query("""(destructor_name) @destructor_name""")
         captures = query.captures(self.root)
         for capture in captures:
-            if capture[1] == 'destructor_name':
-                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
-                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
-                # use capture[0].parent.text
-                content = capture[0].parent.text
-                org_content = capture[0].text
-                if b'~' in org_content:
-                    self.show_capture_info_in_debug_mode(capture, location, content)
-                    self.cctable.table["MEMORY"]["destructor"].append((location, content))
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            org_content = capture[0].text
+            if b'~' in org_content:
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["MEMORY"]["destructor"].append((location, content))
 
     def find_MEMORY_smartptr(self):
         query = CPP_LANGUAGE.query("""(type_identifier) @type_identifier""")
         captures = query.captures(self.root)
         for capture in captures:
-            if capture[1] == 'type_identifier':
-                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
-                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
-                # use capture[0].parent.text
-                content = capture[0].parent.text
-                org_content = capture[0].text
-                if b'shared_ptr' in org_content or b'unique_ptr' in org_content:
-                    self.show_capture_info_in_debug_mode(capture, location, content)
-                    self.cctable.table["MEMORY"]["smartptr"].append((location, content))
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            org_content = capture[0].text
+            if b'shared_ptr' in org_content or b'unique_ptr' in org_content:
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["MEMORY"]["smartptr"].append((location, content))
 
     def find_MEMORY_directinit(self):
-        pass
+        """
+        Direct initialization is performed in the following situations:
+        T object ( arg );
+        T object ( arg1, arg2, ... );       (1)	
+        T object { arg };
+        T object { arg1, arg2, ... };       (2)	(since C++11)
+        # T ( other )
+        # T ( arg1, arg2, ... );            (3)	
+        static_cast< T >( other )	        (4)	
+        new T(args, ...)	                (5)	
+        Class::Class():member(args...){...}	(6)	
+        [arg](){...}                        (7)	(since C++11)
+        """
+        query = CPP_LANGUAGE.query(
+            """(declaration
+                (type_qualifier)*
+                type: (_)
+                declarator: [
+                    (init_declarator
+                    declarator: (identifier) @identifier_type1
+                    value: [(argument_list (_)+)
+                            (initializer_list (_)+)])
+                    (function_declarator
+                    declarator: (identifier) @identifier_type2
+                    parameters: (parameter_list (_)+))])
+                (call_expression
+                    function: (template_function
+                        name: (identifier) @identifier_maybe_static_cast
+                        arguments: (template_argument_list (_)+))
+                    arguments: (argument_list (_)+))
+                (new_expression
+                    type: (_)
+                    arguments: (argument_list (_)+)) @new_expression
+                (function_definition
+                    declarator: (function_declarator)
+                    (field_initializer_list
+                        (field_initializer)+ )@field_initializer )
+                (lambda_expression
+                    captures: (lambda_capture_specifier (_)+)) @lambda_expression""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            invalid_directinit = False
+            # '=' can't show up between identifier and initializer_list
+            if capture[1] == "identifier_type1":
+                identifier_end = capture[0].end_byte
+                for child in capture[0].parent.children:
+                    if child.type == "initializer_list":
+                        initializer_list_start = child.start_byte
+                        if b'=' in self.root.text[identifier_end:initializer_list_start]:
+                            invalid_directinit = True
+                            break
+            if invalid_directinit:
+                continue
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["MEMORY"]["directinit"].append((location, content))
 
     def find_EXCEPTION_trycatch(self):
         pass
