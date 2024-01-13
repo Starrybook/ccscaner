@@ -240,11 +240,27 @@ class Scanner:
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["MEMORY"]["directinit"].append((location, content))
 
+    # EXCEPTION
     def find_EXCEPTION_trycatch(self):
-        pass
+        query = CPP_LANGUAGE.query("""(try_statement) @try_statement""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            content = capture[0].text
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["EXCEPTION"]["trycatch"].append((location, content))
 
     def find_EXCEPTION_noexcept(self):
-        pass
+        query = CPP_LANGUAGE.query("""(noexcept) @noexcept""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["EXCEPTION"]["noexcept"].append((location, content))
 
     def find_POLYMORPHISM_nestedclass(self):
         pass
