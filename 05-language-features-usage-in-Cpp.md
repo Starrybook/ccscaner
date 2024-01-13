@@ -1,11 +1,14 @@
 # An Empirical Study of Language features usage in C/C++
 
-[Repo here.](https://github.com/Starrybook/ccscaner)
+**[Repository here. (Private now)](https://github.com/Starrybook/ccscaner)**
 
 ## Team members
 
-
-
+| Student ID | Name   | Github id                                   |
+| ---------- | ------ | ------------------------------------------- |
+| PB21061327 | 王志成 | [Starrybook](https://github.com/Starrybook) |
+| PB21111656 | 余淼   | [Ymm-cll](https://github.com/Ymm-cll)       |
+| PB21111682 | 龚劲铭 | [Gjmustc](https://github.com/Gjmustc)       |
 
 ## Abstract
 
