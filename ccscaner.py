@@ -266,40 +266,157 @@ class Scanner:
         pass
 
     def find_POLYMORPHISM_operator(self):
-        pass
+        query = CPP_LANGUAGE.query("""(function_declarator(operator_name)) @POLYMORPHISM_operator""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["POLYMORPHISM"]["operator"].append((location, content))
 
     def find_POLYMORPHISM_virtual_overload(self):
         pass
+        # query = CPP_LANGUAGE.query("""[(class_specifier) @class_specifier
+        # (struct_specifier) @struct_specifier]""")
+        # items = query.captures(self.root)
+        # name2vir = {}
+        # for item, _ in items:
+        #     query = CPP_LANGUAGE.query("""(virtual) @virtual""")
+        #     virs = query.captures(item)
+        #     if len(virs) > 0:
+        #         query = CPP_LANGUAGE.query("""(type_identifier) @type_identifier""")
+        #         names = query.captures(item)
+        #         name = names[0]
+        #         item_name = name[0].text
+        #         if item_name not in name2vir.keys():
+        #             name2vir[item_name] = []
+        #         query = CPP_LANGUAGE.query("""(field_declaration) @field_declaration""")
+        #         vir_funcs = query.captures(item)
+        #         for vir_fun in vir_funcs:
+        #             content = vir_fun[0].parent.text
+        #             print(content)
+        #             if "virtual" in str(content):
+        #                 name2vir[item_name].append(content)
 
     def find_POLYMORPHISM_castconvert(self):
-        pass
+        query = CPP_LANGUAGE.query("""(template_function) @template_function""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "_cast" in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["POLYMORPHISM"]["castconvert"].append((location, content))
 
     def find_REFERENCE_friend(self):
-        pass
+        query = CPP_LANGUAGE.query("""(friend_declaration) @friend_declaration""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["REFERENCE"]["friend"].append((location, content))
 
     def find_REFERENCE_this(self):
-        pass
+        query = CPP_LANGUAGE.query("""(this) @this""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            self.show_capture_info_in_debug_mode(capture, location, content)
+            self.cctable.table["REFERENCE"]["this"].append((location, content))
 
     def find_REFERENCE_using(self):
-        pass
+        query = CPP_LANGUAGE.query("""(using_declaration) @using_declaration""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "using" in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["REFERENCE"]["using"].append((location, content))
 
     def find_FUNCTION_typedef(self):
-        pass
+        query = CPP_LANGUAGE.query("""(parameter_list) @parameter_list""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "..." in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["FUNCTION"]["typedef"].append((location, content))
 
     def find_TYPESYS_typedef(self):
-        pass
+        query = CPP_LANGUAGE.query("""(type_definition) @type_definition""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "typedef" in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["TYPESYS"]["typedef"].append((location, content))
 
     def find_TYPESYS_union(self):
-        pass
+        query = CPP_LANGUAGE.query("""(union_specifier) @union_specifier""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "union" in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["TYPESYS"]["union"].append((location, content))
 
     def find_TYPESYS_decltype(self):
-        pass
+        query = CPP_LANGUAGE.query("""(decltype) @decltype""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "decltype" in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["TYPESYS"]["decltype"].append((location, content))
 
     def find_TYPESYS_using(self):
-        pass
+        query = CPP_LANGUAGE.query("""(alias_declaration) @alias_declaration""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "using" in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["TYPESYS"]["using"].append((location, content))
 
     def find_TYPESYS_constexpr(self):
-        pass
+        query = CPP_LANGUAGE.query("""(type_qualifier) @type_qualifier""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "constexpr" in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["TYPESYS"]["constexpr"].append((location, content))
     
 
 
