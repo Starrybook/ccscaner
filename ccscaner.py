@@ -349,7 +349,7 @@ class Scanner:
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["REFERENCE"]["using"].append((location, content))
 
-    def find_FUNCTION_typedef(self):
+    def find_FUNCTION_variparams(self):
         query = CPP_LANGUAGE.query("""(parameter_list) @parameter_list""")
         captures = query.captures(self.root)
         for capture in captures:
@@ -359,7 +359,7 @@ class Scanner:
             content = capture[0].parent.text
             if "..." in str(content):
                 self.show_capture_info_in_debug_mode(capture, location, content)
-                self.cctable.table["FUNCTION"]["typedef"].append((location, content))
+                self.cctable.table["FUNCTION"]["variparams"].append((location, content))
 
     def find_TYPESYS_typedef(self):
         query = CPP_LANGUAGE.query("""(type_definition) @type_definition""")

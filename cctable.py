@@ -56,7 +56,7 @@ class FeatureTable:
         self.table["REFERENCE"]["this"] = []
         self.table["REFERENCE"]["using"] = []
         self.table["FUNCTION"] = {}
-        self.table["FUNCTION"]["typedef"] = []
+        self.table["FUNCTION"]["variparams"] = []
         self.table["TYPESYS"] = {}
         self.table["TYPESYS"]["typedef"] = []
         self.table["TYPESYS"]["union"] = []
