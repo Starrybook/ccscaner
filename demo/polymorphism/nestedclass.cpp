@@ -5,8 +5,8 @@ private:
     static int s;
     class nested // 私有成员
     {
-        public:
-            void display() {}
+    public:
+        void display() {}
     };
     nested nestedObj;
 public:
