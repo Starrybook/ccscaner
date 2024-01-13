@@ -48,7 +48,8 @@ class FeatureTable:
         self.table["POLYMORPHISM"] = {}
         self.table["POLYMORPHISM"]["nestedclass"] = []
         self.table["POLYMORPHISM"]["operator"] = []
-        self.table["POLYMORPHISM"]["virtual_overload"] = []
+        self.table["POLYMORPHISM"]["function_overload"] = []
+        self.table["POLYMORPHISM"]["virtual_override"] = []
         self.table["POLYMORPHISM"]["castconvert"] = []
         self.table["REFERENCE"] = {}
         self.table["REFERENCE"]["friend"] = []

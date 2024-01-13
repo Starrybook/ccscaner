@@ -276,7 +276,10 @@ class Scanner:
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["POLYMORPHISM"]["operator"].append((location, content))
 
-    def find_POLYMORPHISM_virtual_overload(self):
+    def find_POLYMORPHISM_function_overload(self):
+        pass
+
+    def find_POLYMORPHISM_virtual_override(self):
         pass
         # query = CPP_LANGUAGE.query("""[(class_specifier) @class_specifier
         # (struct_specifier) @struct_specifier]""")
