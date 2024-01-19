@@ -54,6 +54,9 @@ class Scanner:
                 else:
                     print(f'In Scanner.run(), {method_name}() does not exist')
         if DEBUG_MODE:
+            print('In find_reference_denominators: ')
+        self.find_reference_denominators()
+        if DEBUG_MODE:
             print('---------------------------------------------------------------------------<')
         # print the result
         if DEBUG_MODE:
@@ -75,7 +78,26 @@ class Scanner:
 
     # TEMPLATE
     def find_TEMPLATE_stl(self):
-        pass
+        # Strategy 1: find include difinitions that use common containers
+        # array, vector, deque, forward_list, list, 
+        # stack, queue, priority_queue, 
+        # set, map, multiset, multimap,
+        # unordered_set, unordered_map, unordered_multiset, unordered_multimap
+        targets = [ b'array', b'vector', b'deque', b'forward_list', b'list',
+                    b'stack', b'queue', b'priority_queue',
+                    b'set', b'map', b'multiset', b'multimap',
+                    b'unordered_set', b'unordered_map', b'unordered_multiset', b'unordered_multimap']
+        query = CPP_LANGUAGE.query("""  (preproc_include
+                                        path: (system_lib_string) @system_lib_string)""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            for item in targets:
+                if item in capture[0].text:
+                    location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                                '-' + str(tuple(x + 1 for x in capture[0].end_point))
+                    content = capture[0].parent.text
+                    self.show_capture_info_in_debug_mode(capture, location, content)
+                    self.cctable.table["TEMPLATE"]["stl"].append((location, content))
 
     def find_TEMPLATE_template(self):
         # Create a query
@@ -85,7 +107,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                         '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+            content = capture[0].text
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["TEMPLATE"]["template"].append((location, content))
     
@@ -95,7 +117,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                         '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+            content = capture[0].text
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["TEMPLATE"]["lambda"].append((location, content))
     
@@ -105,7 +127,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                         '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            content = self.root.text[capture[0].start_byte : capture[0].end_byte]
+            content = capture[0].text
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["TEMPLATE"]["namespace"].append((location, content))
     
@@ -167,17 +189,25 @@ class Scanner:
                 self.cctable.table["MEMORY"]["destructor"].append((location, content))
 
     def find_MEMORY_smartptr(self):
-        query = CPP_LANGUAGE.query("""(type_identifier) @type_identifier""")
-        captures = query.captures(self.root)
-        for capture in captures:
-            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
-                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            # use capture[0].parent.text
-            content = capture[0].parent.text
-            org_content = capture[0].text
-            if b'shared_ptr' in org_content or b'unique_ptr' in org_content:
-                self.show_capture_info_in_debug_mode(capture, location, content)
-                self.cctable.table["MEMORY"]["smartptr"].append((location, content))
+        # only consider type_identifier in declarations and function_definitions
+        query_declarations = CPP_LANGUAGE.query("""(declaration) @declaration""")
+        captures_declarations = query_declarations.captures(self.root)
+        query_declarations = CPP_LANGUAGE.query("""(function_definition
+                                                    type: (_)
+                                                    declarator: (function_declarator) @function_definition)""")
+        captures_declarations += query_declarations.captures(self.root)
+        for capture_declarations in captures_declarations:
+            query = CPP_LANGUAGE.query("""(type_identifier) @type_identifier""")
+            captures = query.captures(capture_declarations[0])
+            for capture in captures:
+                location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                            '-' + str(tuple(x + 1 for x in capture[0].end_point))
+                # use capture[0].parent.text
+                content = capture[0].parent.text
+                org_content = capture[0].text
+                if b'shared_ptr' in org_content or b'unique_ptr' in org_content:
+                    self.show_capture_info_in_debug_mode(capture, location, content)
+                    self.cctable.table["MEMORY"]["smartptr"].append((location, content))
 
     def find_MEMORY_directinit(self):
         """
@@ -421,6 +451,50 @@ class Scanner:
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["TYPESYS"]["constexpr"].append((location, content))
     
+    #####################################################################################
+    """ ------------------- Statistical Reference Denominators  --------------------- """
+    #####################################################################################
+    def find_reference_denominators(self):
+        # file_num
+        self.cctable.reference_table["file_num"] = 1
+        # line_num
+        self.cctable.reference_table["line_num"] = self.root.end_point[0]
+        # macros
+        # use the count of preproc_def as the count of macros
+        query = CPP_LANGUAGE.query("""(preproc_arg) @preproc_arg""")
+        captures = query.captures(self.root)
+        self.cctable.reference_table["macros"] = len(captures)
+        # def_functions
+        query = CPP_LANGUAGE.query("""(function_definition) @function_definition""")
+        captures = query.captures(self.root)
+        self.cctable.reference_table["def_functions"] = len(captures)
+        # def_classes
+        query = CPP_LANGUAGE.query("""(class_specifier) @class_specifier""")
+        captures = query.captures(self.root)
+        self.cctable.reference_table["def_classes"] = len(captures)
+        # def_variables
+        # use the count of declarator as the count of variables (instead of declarations)
+        # include field_declaration
+        # difination of functions is also included
+        query = CPP_LANGUAGE.query("""
+                                   (declaration
+                                        type: (_)
+                                        declarator: (_) @declarator)
+                                   (field_declaration
+                                        type: (_)
+                                        declarator: (_) @declarator)
+                                   (function_definition
+                                        type: (_)
+                                        declarator: (_) @declarator)
+                                   (parameter_declaration
+                                        type: (_)
+                                        declarator: (_) @declarator)""")
+        captures = query.captures(self.root)
+        self.cctable.reference_table["def_variables"] = len(captures)
+        if DEBUG_MODE:
+            print('reference_table:')
+            print(self.cctable.reference_table)
+        return
 
 
 if __name__ == '__main__':

@@ -66,25 +66,42 @@ class FeatureTable:
         # ----------------------------------------------------------- #
         # feature_count: record the number of each feature            #
         # ----------------------------------------------------------- #
-        self.feature_count_table = pd.DataFrame(columns=['feature_num', 
+        self.feature_count_table = pd.DataFrame(columns=['feature_label', 
                                                          'feature_name', 
                                                          'feature_count'])
+        # ----------------------------------------------------------- #
+        # reference_table: denominator for each feature               #
+        # ----------------------------------------------------------- #
+        self.reference_table: dict = {}
+        self.reference_table["file_num"] = 0
+        self.reference_table["line_num"] = 0
+        self.reference_table["macros"] = 0
+        self.reference_table["def_functions"] = 0
+        self.reference_table["def_classes"] = 0
+        self.reference_table["def_variables"] = 0
         return
     
     def update_count(self) -> None:
+        # generate reference count
+        reference_table_list = list(self.reference_table.keys())
+        for key_num in range(len(reference_table_list)):
+            self.feature_count_table.loc[len(self.feature_count_table)] \
+                =  ['0.' + str(key_num + 1), 
+                    reference_table_list[key_num], 
+                    self.reference_table[reference_table_list[key_num]]]
+        # genarate feature_label and feature_name
         feature_types_list = list(self.table.keys())
-        # genarate feature_num and feature_name
         for dict_num in range(len(feature_types_list)):
             feature_items_list = list(self.table[feature_types_list[dict_num]].keys())
             for list_num in range(len(feature_items_list)):
-                # add row: feature_num, feature_name, feature_count
+                # add row: feature_label, feature_name, feature_count
                 self.feature_count_table.loc[len(self.feature_count_table)] \
                     =  [str(dict_num + 1) + '.' + str(list_num + 1),
                         feature_types_list[dict_num] + '_' + 
                         list(self.table[feature_types_list[dict_num]])[list_num],
                         len(self.table[feature_types_list[dict_num]][feature_items_list[list_num]])]
         return
-    
+
     def print_detailed_feature_table(self) -> None:
         # print the detailed feature table
         self.byte_stream_crop() # crop the byte stream first
@@ -120,7 +137,7 @@ class FeatureTable:
         self.byte_stream_crop()
         self.update_count()
         if STORE_FEATURE_TABLE:
-            # store feature_num, feature_name, feature_count into FEATURE_TABLE_PATH
+            # store feature_la b e l |, feature_name, feature_count into FEATURE_TABLE_PATH
             if DEBUG_MODE:
                 print('>---------------------------------------------------------------------------')
                 print('In FeatureTable.store_csv(), table_frame_now:')
