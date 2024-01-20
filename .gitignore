@@ -8,3 +8,4 @@ doc/record.md
 res/repos-info/*.csv
 res/feature-tables/*.csv
 data/repos-info/*.csv
+*.zip

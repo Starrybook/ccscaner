@@ -192,10 +192,10 @@ class Scanner:
         # only consider type_identifier in declarations and function_definitions
         query_declarations = CPP_LANGUAGE.query("""(declaration) @declaration""")
         captures_declarations = query_declarations.captures(self.root)
-        query_declarations = CPP_LANGUAGE.query("""(function_definition
-                                                    type: (_)
-                                                    declarator: (function_declarator) @function_definition)""")
-        captures_declarations += query_declarations.captures(self.root)
+        # query_declarations = CPP_LANGUAGE.query("""(function_definition
+        #                                             type: (_)
+        #                                             declarator: (function_declarator) @function_definition)""")
+        # captures_declarations += query_declarations.captures(self.root)
         for capture_declarations in captures_declarations:
             query = CPP_LANGUAGE.query("""(type_identifier) @type_identifier""")
             captures = query.captures(capture_declarations[0])
@@ -396,8 +396,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            # use capture[0].parent.text
-            content = capture[0].parent.text
+            content = capture[0].text
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["REFERENCE"]["friend"].append((location, content))
 
@@ -407,8 +406,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            # use capture[0].parent.text
-            content = capture[0].parent.text
+            content = capture[0].text
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["REFERENCE"]["this"].append((location, content))
 
@@ -418,8 +416,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            # use capture[0].parent.text
-            content = capture[0].parent.text
+            content = capture[0].text
             if "using" in str(content):
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["REFERENCE"]["using"].append((location, content))
@@ -466,8 +463,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            # use capture[0].parent.text
-            content = capture[0].parent.text
+            content = capture[0].text
             if "decltype" in str(content):
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["TYPESYS"]["decltype"].append((location, content))
@@ -478,8 +474,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            # use capture[0].parent.text
-            content = capture[0].parent.text
+            content = capture[0].text
             if "using" in str(content):
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["TYPESYS"]["using"].append((location, content))
