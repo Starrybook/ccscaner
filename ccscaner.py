@@ -351,7 +351,7 @@ class Scanner:
                     if child.type == "virtual":
                         return False
             return True
-        query = CPP_LANGUAGE.query("""(function_declarator) @function_declarator""")
+        query = CPP_LANGUAGE.query("""(function_definition) @function_definition""")
         captures = query.captures(self.root)
         func_list = []
         for capture in captures:
