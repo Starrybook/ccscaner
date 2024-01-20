@@ -351,30 +351,40 @@ class Scanner:
                     if child.type == "virtual":
                         return False
             return True
-        query = CPP_LANGUAGE.query("""(function_definition) @function_definition""")
+        query = CPP_LANGUAGE.query("""(function_declarator) @function_declarator""")
         captures = query.captures(self.root)
-        func_list = []
+        func_list = {}
         for capture in captures:
             if get_siblings(capture[0]):
-                func_list.append(capture[0].text.split(b" ")[0])
+                name = capture[0].text.split(b"(")[0]
+                if name not in func_list.keys():
+                    func_list[name] = []
+                node_para_list = None
+                for sibling in capture[0].children:
+                    if sibling.type == "parameter_list":
+                        node_para_list = sibling
+                        break
+                if node_para_list.text not in func_list[name]:
+                    func_list[name].append(node_para_list.text)
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
             # use capture[0].parent.text
             content = capture[0].parent.text
-            if capture[0].text.split(b" ")[0] in func_list:
+            name = capture[0].text.split(b"(")[0]
+            if name in func_list and len(func_list[name]) > 1:
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["POLYMORPHISM"]["function_overload"].append((location, content))
 
     def find_POLYMORPHISM_virtual_override(self):
-        query = CPP_LANGUAGE.query("""(virtual_specifier) @virtual_specifier""")
+        query = CPP_LANGUAGE.query("""(function_definition) @function_definition""")
         captures = query.captures(self.root)
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
             # use capture[0].parent.text
             content = capture[0].parent.text
-            if "override" in str(content):
+            if "override" in str(content) or "final" in str(content):
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["POLYMORPHISM"]["virtual_override"].append((location, content))
 
