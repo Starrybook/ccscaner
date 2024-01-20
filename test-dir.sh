@@ -91,7 +91,8 @@ if [[ $STORE_DETAILED_INFO == "-d" ]]; then
     touch ./res/repos-info/EXCEPTION_noexcept.csv
     touch ./res/repos-info/POLYMORPHISM_nestedclass.csv
     touch ./res/repos-info/POLYMORPHISM_operator.csv
-    touch ./res/repos-info/POLYMORPHISM_virtual_overload.csv
+    touch ./res/repos-info/POLYMORPHISM_function_overload.csv
+    touch ./res/repos-info/POLYMORPHISM_virtual_override.csv
     touch ./res/repos-info/POLYMORPHISM_castconvert.csv
     touch ./res/repos-info/REFERENCE_friend.csv
     touch ./res/repos-info/REFERENCE_this.csv

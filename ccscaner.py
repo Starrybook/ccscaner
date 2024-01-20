@@ -92,7 +92,7 @@ class Scanner:
         captures = query.captures(self.root)
         for capture in captures:
             for item in targets:
-                if item in capture[0].text and '<' in capture[0].text:
+                if item in capture[0].text and b'<' in capture[0].text:
                     location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                                 '-' + str(tuple(x + 1 for x in capture[0].end_point))
                     content = capture[0].parent.text
@@ -342,7 +342,7 @@ class Scanner:
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["POLYMORPHISM"]["operator"].append((location, content))
 
-   def find_POLYMORPHISM_function_overload(self):
+    def find_POLYMORPHISM_function_overload(self):
         # 获取节点的兄弟节点
         def get_siblings(node):
             parent = node.parent
