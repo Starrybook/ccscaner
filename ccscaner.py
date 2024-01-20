@@ -83,16 +83,16 @@ class Scanner:
         # stack, queue, priority_queue, 
         # set, map, multiset, multimap,
         # unordered_set, unordered_map, unordered_multiset, unordered_multimap
-        targets = [ b'array', b'vector', b'deque', b'forward_list', b'list',
-                    b'stack', b'queue', b'priority_queue',
-                    b'set', b'map', b'multiset', b'multimap',
-                    b'unordered_set', b'unordered_map', b'unordered_multiset', b'unordered_multimap']
+        targets = [ b'<array>', b'<vector>', b'<deque>', b'<forward_list>', b'<list>',
+                    b'<stack>', b'<queue>', b'<priority_queue>',
+                    b'<set>', b'<map>', b'<multiset>', b'<multimap>',
+                    b'<unordered_set>', b'<unordered_map>', b'<unordered_multiset>', b'<unordered_multimap>']
         query = CPP_LANGUAGE.query("""  (preproc_include
                                         path: (system_lib_string) @system_lib_string)""")
         captures = query.captures(self.root)
         for capture in captures:
             for item in targets:
-                if item in capture[0].text and b'<' in capture[0].text:
+                if item in capture[0].text:
                     location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                                 '-' + str(tuple(x + 1 for x in capture[0].end_point))
                     content = capture[0].parent.text
