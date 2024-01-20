@@ -26,7 +26,7 @@ class Scanner:
         # get parse tree
         parser = Parser()
         parser.set_language(CPP_LANGUAGE)
-        with open(src, "r", encoding='utf-8') as file:
+        with open(src, "r", encoding='utf-8', errors='ignore') as file:
             self.text = file.read().encode('utf-8')
         self.tree = parser.parse(self.text)
         # in order to traverse the tree

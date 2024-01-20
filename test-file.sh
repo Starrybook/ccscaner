@@ -102,6 +102,15 @@ fi
 # Call ccscaner.py
 # echo "Running ccscaner.py"
 # echo "python3 ccscaner.py $SRC_FILE_PATH $DEBUG_MODE ./res/feature-tables/${FEATURE_TABLE_NAME}.csv ./res/repos-info/"
-python3 ccscaner.py $SRC_FILE_PATH $DEBUG_MODE ./res/feature-tables/${FEATURE_TABLE_NAME}.csv ./res/repos-info/
+if [[ $STORE_FEATURE_TABLE -eq 1 ]]; then
+    if [[ $STORE_DETAILED_INFO -eq 1 ]]; then
+        python3 ccscaner.py $SRC_FILE_PATH $DEBUG_MODE ./res/feature-tables/${FEATURE_TABLE_NAME}.csv ./res/repos-info/
+    else
+        python3 ccscaner.py $SRC_FILE_PATH $DEBUG_MODE ./res/feature-tables/${FEATURE_TABLE_NAME}.csv
+    fi
+else
+    python3 ccscaner.py $SRC_FILE_PATH $DEBUG_MODE
+fi
+# python3 ccscaner.py $SRC_FILE_PATH $DEBUG_MODE ./res/feature-tables/${FEATURE_TABLE_NAME}.csv ./res/repos-info/
 
 echo "Done."
