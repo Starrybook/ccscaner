@@ -384,7 +384,7 @@ class Scanner:
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
             # use capture[0].parent.text
             content = capture[0].parent.text
-            if "override" in str(content) or "final" in str(content):
+            if "override" in str(capture[0].text) or "final" in str(capture[0].text):
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["POLYMORPHISM"]["virtual_override"].append((location, content))
 
