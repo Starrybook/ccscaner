@@ -382,8 +382,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            # use capture[0].parent.text
-            content = capture[0].parent.text
+            content = capture[0].text
             if "override" in str(capture[0].text) or "final" in str(capture[0].text):
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["POLYMORPHISM"]["virtual_override"].append((location, content))
@@ -449,8 +448,7 @@ class Scanner:
         for capture in captures:
             location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
-            # use capture[0].parent.text
-            content = capture[0].parent.text
+            content = capture[0].text
             if "typedef" in str(content):
                 self.show_capture_info_in_debug_mode(capture, location, content)
                 self.cctable.table["TYPESYS"]["typedef"].append((location, content))
