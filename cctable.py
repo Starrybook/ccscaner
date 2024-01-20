@@ -129,8 +129,8 @@ class FeatureTable:
         for key in self.table:
             for list in self.table[key]:
                 for index, item in enumerate(self.table[key][list]):
-                    if len(item[1]) > 80:
-                        self.table[key][list][index] = (item[0], item[1][:75]+b'...')
+                    if len(item[1]) > 50:
+                        self.table[key][list][index] = (item[0], item[1][:45]+b'...')
 
     def store_csv(self) -> None:
         # update feature_count first

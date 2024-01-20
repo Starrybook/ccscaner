@@ -92,7 +92,7 @@ class Scanner:
         captures = query.captures(self.root)
         for capture in captures:
             for item in targets:
-                if item in capture[0].text:
+                if item in capture[0].text and '<' in capture[0].text:
                     location = str(tuple(x + 1 for x in capture[0].start_point)) + \
                                 '-' + str(tuple(x + 1 for x in capture[0].end_point))
                     content = capture[0].parent.text
@@ -293,7 +293,43 @@ class Scanner:
             self.cctable.table["EXCEPTION"]["noexcept"].append((location, content))
 
     def find_POLYMORPHISM_nestedclass(self):
-        pass
+        # [DFS] traverse the tree to find class_specifier (outmost layer)
+        # when find a class_specifier, use query to find the inner class_specifiers
+        # and don't visit its subnodes
+        self.cursor.reset(self.root)
+        flag_subtree_visited = False
+        while True:
+            if flag_subtree_visited:
+                flag_subtree_visited = False
+                if not self.cursor.goto_next_sibling():
+                    if not self.cursor.goto_parent():
+                        break
+                    else:
+                        flag_subtree_visited = True
+                continue
+            elif self.cursor.node.type == "class_specifier":
+                query = CPP_LANGUAGE.query("""(class_specifier) @class_specifier""")
+                for child in self.cursor.node.children:
+                    captures = query.captures(child)
+                    for capture in captures:
+                        location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                                    '-' + str(tuple(x + 1 for x in capture[0].end_point))
+                        content = capture[0].text
+                        if len(content) > 50:
+                            content = content[:45] + b'...'
+                        self.show_capture_info_in_debug_mode(capture, location, content)
+                        self.cctable.table["POLYMORPHISM"]["nestedclass"].append((location, content))
+                self.cursor.goto_parent()
+                flag_subtree_visited = True
+            elif self.cursor.goto_first_child():
+                continue
+            else:
+                if not self.cursor.goto_next_sibling():
+                    if not self.cursor.goto_parent():
+                        break
+                    else:
+                        flag_subtree_visited = True
+                continue
 
     def find_POLYMORPHISM_operator(self):
         query = CPP_LANGUAGE.query("""(function_declarator(operator_name)) @POLYMORPHISM_operator""")
