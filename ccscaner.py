@@ -342,32 +342,41 @@ class Scanner:
             self.show_capture_info_in_debug_mode(capture, location, content)
             self.cctable.table["POLYMORPHISM"]["operator"].append((location, content))
 
-    def find_POLYMORPHISM_function_overload(self):
-        pass
+   def find_POLYMORPHISM_function_overload(self):
+        # 获取节点的兄弟节点
+        def get_siblings(node):
+            parent = node.parent
+            if parent:
+                for child in parent.children:
+                    if child.type == "virtual":
+                        return False
+            return True
+        query = CPP_LANGUAGE.query("""(function_declarator) @function_declarator""")
+        captures = query.captures(self.root)
+        func_list = []
+        for capture in captures:
+            if get_siblings(capture[0]):
+                func_list.append(capture[0].text.split(b" ")[0])
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if capture[0].text.split(b" ")[0] in func_list:
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["POLYMORPHISM"]["function_overload"].append((location, content))
 
     def find_POLYMORPHISM_virtual_override(self):
-        pass
-        # query = CPP_LANGUAGE.query("""[(class_specifier) @class_specifier
-        # (struct_specifier) @struct_specifier]""")
-        # items = query.captures(self.root)
-        # name2vir = {}
-        # for item, _ in items:
-        #     query = CPP_LANGUAGE.query("""(virtual) @virtual""")
-        #     virs = query.captures(item)
-        #     if len(virs) > 0:
-        #         query = CPP_LANGUAGE.query("""(type_identifier) @type_identifier""")
-        #         names = query.captures(item)
-        #         name = names[0]
-        #         item_name = name[0].text
-        #         if item_name not in name2vir.keys():
-        #             name2vir[item_name] = []
-        #         query = CPP_LANGUAGE.query("""(field_declaration) @field_declaration""")
-        #         vir_funcs = query.captures(item)
-        #         for vir_fun in vir_funcs:
-        #             content = vir_fun[0].parent.text
-        #             print(content)
-        #             if "virtual" in str(content):
-        #                 name2vir[item_name].append(content)
+        query = CPP_LANGUAGE.query("""(virtual_specifier) @virtual_specifier""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                       '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            # use capture[0].parent.text
+            content = capture[0].parent.text
+            if "override" in str(content):
+                self.show_capture_info_in_debug_mode(capture, location, content)
+                self.cctable.table["POLYMORPHISM"]["virtual_override"].append((location, content))
 
     def find_POLYMORPHISM_castconvert(self):
         query = CPP_LANGUAGE.query("""(template_function) @template_function""")
