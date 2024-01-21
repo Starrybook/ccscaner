@@ -1,6 +1,7 @@
---------------(已运行)-------------------
+--------------(已运行且分领域统计)-------------------
 1. 操作系统
-torvalds/linuxreactos/reactos 
+torvalds/linux
+reactos/reactos 
 2. 软件工程
 facebook/react-native 
 cinder/Cinder 
@@ -12,15 +13,10 @@ apache/mxnet
 openssl/openssl 
 5. 数据库
 rocksdb
-sqlitebrowser
-typesense
-arrow
 duckdb
-mysql
 mysql
 6. 游戏开发
 cocos2d-x
-CnC_Remastered_Collection
 Hazel
 godotengine/godot 
 7. 金融领域
@@ -51,7 +47,3 @@ opencv
 swift
 json
 grpc
-flatbuffers
-spdlog
-foundationdb
-incubator-weex
