@@ -1,6 +1,10 @@
 # An Empirical Study of Language features usage in C/C++
 
-**[Repository here. (Private now)](https://github.com/Starrybook/ccscaner)**
+**[Repository here. (Public now)](https://github.com/Starrybook/ccscaner)**
+
+**[Report here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/Report.md)**
+
+**[How to use this tool. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/scripts-examples.md)**
 
 ## Team members
 
@@ -51,8 +55,14 @@
 
 ## Related works
 
-https://github.com/tree-sitter/py-tree-sitter
+[An Empirical Study for Common Language Features Used in Python Projects](https://ieeexplore.ieee.org/abstract/document/9425916)
 
-https://github.com/S4Plus/PyScan
+[An Empirical Study of Type-Related Defects in Python Projects](https://ieeexplore.ieee.org/document/9436020)
 
-https://ieeexplore.ieee.org/abstract/document/9425916
+[An Empirical Study of C++ Programs](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=60944615a1a9e432d1d4338b528e60e7dc9de3c3)
+
+[An Empirical Study of Function Overloading in C++](https://ieeexplore.ieee.org/document/4637538)
+
+[Github repository: PyScan](https://github.com/S4Plus/PyScan)
+
+[Tree-sitter official documentation](https://github.com/tree-sitter/py-tree-sitter)
