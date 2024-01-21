@@ -1,3 +1,9 @@
+############################################################
+#                                                          #
+# This file is not enabled and is an invalid file!!!       #
+#                                                          #
+############################################################ 
+
 import tree_sitter
 from tree_sitter import Language, Parser
 import csv
@@ -23,14 +29,6 @@ class Analyser:
         pass
 
     def run(self) -> None:
-        self.print_feature_table()
-        self.store_csv()
-        pass
-
-    def print_feature_table(self) -> None:
-        pass
-
-    def store_csv(self) -> None:
         pass
 
 if __name__ == "__main__":

@@ -25,6 +25,9 @@
 
 4.  与现有的基于其他高级语言特性的相关研究进行对照，进行进一步的讨论
 
+
+
+
 ## Design
 
 >   这一部分不涉及具体实现，主要侧重功能预期
@@ -108,8 +111,7 @@
 
 
 
-
-### `C/C++` Features
+### C/C++ Features
 
 >   特征表格
 
@@ -142,56 +144,177 @@
 |                                |              using              |                 创建类型别名，增加代码可读性                 |        变量定义数取对数         |
 |                                |            votatile             | 提醒编译器该变量易变，无需优化，系统总是重新从它所在的内存读取数据 |        变量定义数取对数         |
 |                                |            constexpr            |    指定变量或函数的值可以在常量表达式中出现，减少重复计算    |        变量定义数取对数         |
->   是否需要有说明？
+>   ==是否需要有说明？==
 
 
 
 ### Data set
 
->   仓库数据集的选取
+>   ==仓库数据集的选取==
 
 >   按照类别划分，之后也做一个表格
 
 ### Data analysis
 
->   希望得到数据之后按照何种方式进行分析
+>   ==希望得到数据之后按照何种方式进行分析==（这里是设计不是最终结果）
 
 >   待定
 
 ### CCScaner
 
->   预期功能介绍
-
 在分析目标、分析方式、分析工具悉数确定之后，就可以着手构建实现目标的代码框架。
 
 #### Expected functionality
 
-一些期望达成的主要功能：
+期望达成的主要功能：
 
 1.  树分析：对目标文件生成分析树并针对目标特征表项进行树访问提取出目标特征。
 2.  数据获取与存储：记录各个文件中各个目标特征出现的次数并累加，并记录其所在仓库名、文件路径、行列位置与局部字节串信息以便于索引。具体存储格式在`doc/storage-format.md`中有具体说明。
 
 #### Project structure
 
-<img src=".assets/ccscaner-structure.jpg" alt="ccscaner-structure" style="zoom:50%;" />
+设计思路如下：
+
+<img src=".assets/ccscaner-structure.jpg" alt="ccscaner-structure"  />
+
+##### Preliminary preparation
+
+1.   前期选定目标语言，利用`Tree-sitter`中对应语言部分的源码编译出动态链接库，作为`Parser`的输入。
+
+2.   利用动态链接库为`Tree-sitter`库中的`Parser`设定语言类型之后，利用`Parser`分析仓库中的 C/C++ 源代码文件得到树形结构，获得根节点。
+
+3.   对树中的每一个结点，可以获取到其代表的词法单元对应的行列坐标范围的字节串，同时还可以这一部分字串的词法结构，其存储结构是S-表达式，这是一种形式表达半结构化数据的约定，在 Lisp 语言中广为应用。其结构大致如下：
+
+     ```text
+     (translation_unit (preproc_include path: (system_lib_string)) (function_definition type: (primitive_type) declarator: (function_declarator declarator: (identifier) parameters: (parameter_list)) body: (compound_statement (declaration type: (primitive_type) declarator: (init_declarator declarator: (identifier) value: (number_literal))) (return_statement (number_literal)))))
+     ```
+
+     利用这一表示形式，可以快速通过`query`对目标结构进行查找，这在下面会有介绍。
+
+##### Mid-term data processing
+
+1.  基于我们已经划分出来的特征表条目确定项目核心类`CCTable`的内容，其中包括：
+
+    1.  各个表项的定义
+    2.  统计基数的定义与处理
+    3.  存储文件的维护与更新
+
+    同时注意要限制每一个特征对应的局部`content`即字节序列的长度，对较大的字节序列进行裁剪，以防止空间效能过差。
+
+2.  得到树结构与结点对应的 `S-expression` 之后，可以使用核心分析脚本`CCScaner`进行树结构分析，寻找目标特性，可以利用的方式有`query`查询与树访问，分别基于`S-expression`与树结构。这一过程受到我们对每个特征项定义的特征识别逻辑的指导。
+
+    分析结果为`Feature Table`与`Feature Detailed Info`，前者记录特征的使用次数，以供统计分析；后者是特征每一次使用的相关信息，以供深入分析。
+
+##### Post analysis
+
+1.  基于 CCScaner 对仓库中大量文件的分析结果进行分析，构想是采用一个 CCAnalyser 完成：
+
+    1.  汇总分析
+    2.  对可能跨文件的特征进行统计
+
+    并预留了接口。
+
+    但实际上对于第二点，由于目标特征中并不存在这一情形，加上时间比较紧迫，所以并没有加入仓库。对于第一点，由于仓库数量并不多，使用表格统计的方式更加灵活高效，所以也没有进行代码实现。
+
+    因而尽管设计时这一文件预留了接口，但实际没有启用，项目仍然以 CCScaner 为核心。
+
+2.   统计出 Final Result ，以供最终的汇总分析。
 
 
 
 #### Analysis methods
 
+这里介绍特征识别的两种主要方式。
+
 ##### Query
 
+使用`query`对结点的`S-expression`进行查询。
 
+基本模式如下：
+
+```python
+    def find_MEMORY_directinit(self):
+        query = CPP_LANGUAGE.query(
+            """(declaration
+                (type_qualifier)*
+                type: (_)
+                declarator: [
+                    (init_declarator
+                    declarator: (identifier) @identifier_type1
+                    value: [(argument_list (_)+)
+                            (initializer_list (_)+)])
+                    (function_declarator
+                    declarator: (identifier) @identifier_type2
+                    parameters: (parameter_list (_)+))])
+                (new_expression
+                    type: (_)
+                    arguments: (argument_list (_)+)) @new_expression
+                (lambda_expression
+                    captures: (lambda_capture_specifier (_)+)) @lambda_expression
+                ......(其它的query项省略)""")
+        captures = query.captures(self.root)
+        for capture in captures:
+            # '=' can't show up between identifier and initializer_list
+            if capture[1] == "identifier_type1":
+            	# ......(省略)
+           	# 记录所需要的具体信息：
+            location = str(tuple(x + 1 for x in capture[0].start_point)) + \
+                        '-' + str(tuple(x + 1 for x in capture[0].end_point))
+            content = capture[0].parent.text
+            # ......(省略)
+            self.cctable.table["MEMORY"]["directinit"].append((location, content)) # 加入特征表条目
+```
+
+匹配过程中允许一些类似于正则式的表达方式。
+
+上述的代码可以匹配类似于`T object ( arg1, arg2, ... );`，`T object { arg1, arg2, ... };`，`new T(args, ...)`，`[arg](){...}`的形式的子 S-表达式（其它一些这里省略了），对应于 C++ 手册中直接初始化的`(1), (2), (5), (7)`情形。
+
+由此可以得知 `query`的表达力。
 
 ##### Tree cursor
+
+使用 Tree cursor 对树结构进行快速遍历。
+
+```python
+    def find_POLYMORPHISM_nestedclass(self):
+        # [DFS] traverse the tree to find class_specifier (outmost layer)
+        # when find a class_specifier, use query to find the inner class_specifiers
+        # and don't visit its subnodes
+        self.cursor.reset(self.root)
+        # .......(省略)
+        while True:
+            if flag_subtree_visited:
+                flag_subtree_visited = False
+                if not self.cursor.goto_next_sibling():
+                    # .......(省略)
+                continue
+            elif self.cursor.node.type == "class_specifier":
+                # 遇到一个类结点后用 query 访问其文本内容，不再继续向下遍历
+                query = CPP_LANGUAGE.query("""(class_specifier) @class_specifier""")
+                for child in self.cursor.node.children:
+                    captures = query.captures(child)
+                    for capture in captures:
+                        content = capture[0].text
+                        # .......(添加特征表项，过程省略)
+                self.cursor.goto_parent()
+                flag_subtree_visited = True
+            elif self.cursor.goto_first_child():
+                continue
+            else:
+                if not self.cursor.goto_next_sibling():
+                    if not self.cursor.goto_parent():
+                    # .......(省略)
+                continue
+        return
+```
+
+这里是一个深度优先遍历的情形，遇到类结点之后对其标识的 S-表达式范围进行 query 查询，统计嵌套类个数。
+
+上述两个例子能够展现使用 Tree-sitter 所能够进行的基本操作。
 
 
 
 ### Technical route
-
->   开发路线（时间线）
->
->   之后再细化一下
 
 1.  明确目标语言
 2.  讨论语言特性，选择关注点并进行汇总
@@ -215,9 +338,14 @@
 | PB21111656 | 余淼   | [Ymm-cll](https://github.com/Ymm-cll)       |              |
 | PB21111682 | 龚劲铭 | [Gjmustc](https://github.com/Gjmustc)       |              |
 
+
+
 ## Implementation
 
 ### Inner structure of CCScaner
+
+这里给出了一个比设计部分更为具体的描述：
+
 ```bash
 ~/Documents/ccscaner$ tree
 .
