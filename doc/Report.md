@@ -152,7 +152,48 @@
 
 >   ==仓库数据集的选取==
 
->   按照类别划分，之后也做一个表格
+|       领域       |             项目名称              |                           项目简介                           |
+| :--------------: | :-------------------------------: | :----------------------------------------------------------: |
+|     操作系统     |          torvalds/linux           |                      Linux 内核的源代码                      |
+|                  |          reactos/reactos          |           专注于兼容自Windows NT到XP的开源操作系统           |
+|     软件工程     |       facebook/react-native       |            Facebook 的开源框架，用以构建移动应用             |
+|                  |           cinder/Cinder           |            一套开源的、专为创意编程而设计的C++库             |
+|   AI与机器学习   |           opencv/opencv           |         开源计算机视觉库，其中包含了多种机器视觉算法         |
+|                  |       tensorflow/tensorflow       |                    Google 的深度学习框架                     |
+|                  |           apache/mxnet            |       深度学习框架，它让数据科学家可以构建深度学习模型       |
+|     加密系统     |          openssl/openssl          |         包含了加密算法和用于创建SSL和TLS协议的工具库         |
+|      数据库      |              rocksdb              |          C++构建的，针对快速存储场景的嵌入式数据库           |
+|                  |           sqlitebrowser           |                 浏览和操作SQLite数据库的工具                 |
+|                  |             typesense             |              快速、打字错误兼容的、开源搜索引擎              |
+|                  |               arrow               |            提供了一套用于处理大规模数据的开源工具            |
+|                  |              duckdb               |             是一个为分析查询优化的内存原生数据库             |
+|                  |               mysql               |                     关系型数据库管理系统                     |
+|     游戏开发     |             cocos2d-x             |                 一个用于构建2D游戏的开源框架                 |
+|                  |     CnC_Remastered_Collection     |                 《命令与征服》的开源游戏代码                 |
+|                  |               Hazel               |                      易用的游戏制作引擎                      |
+|                  |         godotengine/godot         |        全功能的开源游戏开发引擎，支持2D和3D游戏的开发        |
+|     金融领域     |        lballabio/QuantLib         |                  用于金融工程的自由/开源库                   |
+|                  |          bitcoin/bitcoin          |         Bitcoin核心维护团队官方维护的比特币项目源码          |
+|    嵌入式系统    | rogerclarkmelbourne/Arduino_STM32 |              用于在STM32基板上运行的Arduino适配              |
+|                  |            ETLCPP/etl             |                       一种嵌入式模板库                       |
+|     网络通信     |         chromium/chromium         |                    Chrome浏览器的开源项目                    |
+|                  |         mozilla/gecko-dev         |                      Firefox的开源项目                       |
+|                  |           webkit/webkit           | 开源的浏览器引擎，支持HTML和JavaScript，广泛应用于Apple的Safari浏览器以及很多其他的开源浏览器 |
+|     量子计算     |           eclipse/xacc            |              开源的，为量子加速器设计的编程框架              |
+|     编译系统     |         llvm/llvm-project         |  LLVM项目，包含了一套编译工具链，用于从多种语言生成机器代码  |
+|                  |          gcc-mirror/gcc           | 免费的编程语言编译器，支持如C、C++、Java、Fortran等多种编程语言，并可跨平台使用。 |
+|                  |           Kitware/CMake           |                    跨平台的自动化建构系统                    |
+|      自动化      |          FreeCAD/FreeCAD          |                      开源的3D 建模软件                       |
+|                  |        ros-planning/moveit        |                  用于机器人移动规划的工具集                  |
+|     编码技术     |       PointCloudLibrary/pcl       |               用于2D/3D 图像和点云处理的开源库               |
+|                  |            Kitware/VTK            |             用于处理和显示科学数据的开源软件系统             |
+| 开发者工具与插件 |               swift               |                     Apple 的开源编程语言                     |
+|                  |               json                |                       轻量级的数据格式                       |
+|                  |               grpc                |                Google 的开源远程过程调用系统                 |
+|                  |            flatbuffers            |               Google 的开源内存高效的序列化库                |
+|                  |              spdlog               |               极其快速、灵活且方便的C++日志库                |
+|                  |           foundationdb            |            分布式数据库，设计用于大规模的数据存储            |
+|                  |          incubator-weex           | 提供一个框架，使开发人员能够使用现代的Web开发经验来构建安卓、iOS以及web的高性能应用程序 |
 
 ### Data analysis
 
