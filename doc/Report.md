@@ -82,7 +82,7 @@
 然而上述优点部分是建立在如下的牺牲上的：
 
 -   `Tree-sitter`是一个词法分析器，生成的结果是`CST`而非`AST`，因而造成：
-    -   缺乏一些重要的语义信息，比如类型标注
+    -   缺乏一些重要的语义信息，比如类型标注，继而造成识别能力有限
     -   由于缺乏预编译过程，在不引入库文件内容的同时也造成存在于代码中的宏无法展开
     -   由于`C/C++`的宏展开替换过于灵活，对于某些宏在应用中的特殊情形容易误识别造成统计的偏差
 
@@ -164,50 +164,16 @@
 
 在分析目标、分析方式、分析工具悉数确定之后，就可以着手构建实现目标的代码框架。
 
+#### Expected functionality
+
+一些期望达成的主要功能：
+
+1.  树分析：对目标文件生成分析树并针对目标特征表项进行树访问提取出目标特征。
+2.  数据获取与存储：记录各个文件中各个目标特征出现的次数并累加，并记录其所在仓库名、文件路径、行列位置与局部字节串信息以便于索引。具体存储格式在`doc/storage-format.md`中有具体说明。
+
 #### Project structure
 
-```bash
-~/Documents/ccscaner$ tree
-.
-├── README.md						: 仓库介绍
-├── 05-language-features-usage-in-Cpp.md	: 小组工作介绍
-├── build							: 从 tree-sitter 源码编译出针对目标语言的动态链接库
-│   └── my-languages.so				: 可为任意语言，本项目中为 c/c++
-├── doc								: 文档
-│   ├── binding.pyi					: tree-sitter 的 python 绑定
-│   ├── Cppfeatures.md				: c/c++ 目标特性表，即本项目分析目标
-│   ├── grammar.js					:
-│   ├── Report.md					: 报告【当前文件】
-│   ├── scripts-examples.md			: 执行脚本的使用示例与相关说明
-│   ├── scripts.md					: 脚本的接口说明
-│   ├── sources.md					: tree-sitter 官方文档等参考信息
-│   └── storage-format.md			: 数据存储格式的统一定义
-├── demo							: 测试文件，实质上是对抽象特征表条目的具象化描述
-│   ├── FEATURE-CLASS				: 特征大类
-│   │   ├── ......					: 大类下的具体条目
-│   │   └── feature-item.cpp
-│   └── ......						: 其他特征大类
-├── data							: 最终分析结果原始数据的存放位置
-│   ├── feature-tables				: 目标仓库的特征统计表
-│   │   ├── ......					: 以仓库名标识的特征统计表
-│   │   └── repo-name.csv
-│   ├── ......						: 每个仓库的具体信息条目做成压缩包的形式存放于此
-│   └── repo-name-res.zip
-├── res								: 程序运行时的分析结果存放处，是运行时维护的共享区域
-│   ├── feature-tables				: 目标目录/文件的特征表存放处
-│   │   ├── ......					: 以目录/文件名称命名的特征统计表文件
-│   │   └── repo-name.csv
-│   └── repos-info					: 目录/文件具体信息条目存放处
-│       ├── ......					: 按照 特征大类-特征具体条目 标识的 csv 文件
-│       └── FEATURECLASS_featureItem.csv
-├── ccanalyser.py					: 基于 ccscaner 的结果进行综合分析，设计时预留了接口，但最后并未启用
-├── ccscaner.py						: 项目核心，包含对每一个特征条目的处理逻辑，依赖于 cc
-├── cctable.py						: 项目核心，定义了特征表的数据结构，并承担存储部分的工作
-├── ccprinter.py					: 实现分析树可视化，辅助调试
-├── test-file.sh					: 对单个指定的文件进行分析，多用于调试，也作为 test-dir 的子过程
-├── test-dir.sh						: 对目录下的所有符合后缀要求的文件进行分析，依赖于 test-file
-└── clean-all.sh					: 清除 ./res/ 下的分析产出
-```
+<img src=".assets/ccscaner-structure.jpg" alt="ccscaner-structure" style="zoom:50%;" />
 
 
 
@@ -252,7 +218,48 @@
 ## Implementation
 
 ### Inner structure of CCScaner
-
+```bash
+~/Documents/ccscaner$ tree
+.
+├── README.md						: 仓库介绍
+├── 05-language-features-usage-in-Cpp.md	: 小组工作介绍
+├── build							: 从 tree-sitter 源码编译出针对目标语言的动态链接库
+│   └── my-languages.so				: 可为任意语言，本项目中为 c/c++
+├── doc								: 文档
+│   ├── binding.pyi					: tree-sitter 的 python 绑定
+│   ├── Cppfeatures.md				: c/c++ 目标特性表，即本项目分析目标
+│   ├── grammar.js					:
+│   ├── Report.md					: 报告【当前文件】
+│   ├── scripts-examples.md			: 执行脚本的使用示例与相关说明
+│   ├── scripts.md					: 脚本的接口说明
+│   ├── sources.md					: tree-sitter 官方文档等参考信息
+│   └── storage-format.md			: 数据存储格式的统一定义
+├── demo							: 测试文件，实质上是对抽象特征表条目的具象化描述
+│   ├── FEATURE-CLASS				: 特征大类
+│   │   ├── ......					: 大类下的具体条目
+│   │   └── feature-item.cpp
+│   └── ......						: 其他特征大类
+├── data							: 最终分析结果原始数据的存放位置
+│   ├── feature-tables				: 目标仓库的特征统计表
+│   │   ├── ......					: 以仓库名标识的特征统计表
+│   │   └── repo-name.csv
+│   ├── ......						: 每个仓库的具体信息条目做成压缩包的形式存放于此
+│   └── repo-name-res.zip
+├── res								: 程序运行时的分析结果存放处，是运行时维护的共享区域
+│   ├── feature-tables				: 目标目录/文件的特征表存放处
+│   │   ├── ......					: 以目录/文件名称命名的特征统计表文件
+│   │   └── repo-name.csv
+│   └── repos-info					: 目录/文件具体信息条目存放处
+│       ├── ......					: 按照 特征大类-特征具体条目 标识的 csv 文件
+│       └── FEATURECLASS_featureItem.csv
+├── ccanalyser.py					: 基于 ccscaner 的结果进行综合分析，设计时预留了接口，但最后并未启用
+├── ccscaner.py						: 项目核心，包含对每一个特征条目的处理逻辑，依赖于 cc
+├── cctable.py						: 项目核心，定义了特征表的数据结构，并承担存储部分的工作
+├── ccprinter.py					: 实现分析树可视化，辅助调试
+├── test-file.sh					: 对单个指定的文件进行分析，多用于调试，也作为 test-dir 的子过程
+├── test-dir.sh						: 对目录下的所有符合后缀要求的文件进行分析，依赖于 test-file
+└── clean-all.sh					: 清除 ./res/ 下的分析产出
+```
 
 
 ### How to analyze a repository?
