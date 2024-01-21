@@ -316,16 +316,38 @@
 
 ### Technical route
 
-1.  明确目标语言
-2.  讨论语言特性，选择关注点并进行汇总
+1.  明确目标语言：C/C++
+
+2.  讨论语言特性，选择关注点并进行汇总：
+
+    目标特征类：$\text{Template \& Modular Programming}$ 、$\text{Concurrency \&Multithreading}$、$\text{Memory Management}$、$\text{Exception Handling}$、$\text{Polymorphism \& Overloading}$、$\text{Reference Control}$、$\text{Function}$、$\text{Type System}$。
+
 3.  建立`CCScaner`的项目框架，选择树分析工具，完成外层数据处理脚本
+
+    树分析工具确定为 Tree-sitter 。
+
+    项目结构的介绍前后均有提及。
+
 4.  确定数据处理与存储流程，完成对特性表类`cctable`的搭建
+
+    其中存储的格式见 `doc/storage-format.md`。
+
 5.  基于特性汇总表完成对`demo/`目录的填充，将特征的定义细化到语言实例
+
+    其目的是便于确定目标特性的出现模式，从而确定代码逻辑；同时也用于代码测试。
+
 6.  完成`CCScaner`项目核心类`ccscaner`，确定对每一个特性项的处理逻辑
+
 7.  分别对单文件和单目录进行调试测试，据此完善项目的每一个组件
+
 8.  对测试仓库进行处理，得到相应数据，从而对特性表、特性处理方法进行反复的再调整
+
+    对于一些明显不符合实际认知的数值通过查看过程中记录的具体信息找到误识别的位置，修改代码逻辑以规避这种情形。
+
 9.  利用已完善的工具`CCScaner`对大量仓库进行分析汇总
+
 10.  对数据进行处理与人工分析，得到初步结论
+
 11.  与现有的相关研究进行对照，进行深入讨论
 
 
@@ -398,16 +420,31 @@
 
 ### Raw data
 
->   对不同仓库统计出来的原始数据
+>   ==对不同仓库统计出来的原始数据==
 
 ### Analysis
 
->   对数据分析的部分，可能会有多个子项
+>   ==对数据分析的部分，可能会有多个子项==
 
 
 
 ## Conclusion
 
+>   ==一个概括性的结论。==主要分析结论在上一部分已经写过，这里只是简要地概括一下
+
 
 
 ## Reference
+
+[An Empirical Study for Common Language Features Used in Python Projects](https://ieeexplore.ieee.org/abstract/document/9425916)
+
+[An Empirical Study of Type-Related Defects in Python Projects](https://ieeexplore.ieee.org/document/9436020)
+
+[An Empirical Study of C++ Programs](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=60944615a1a9e432d1d4338b528e60e7dc9de3c3)
+
+[An Empirical Study of Function Overloading in C++](https://ieeexplore.ieee.org/document/4637538)
+
+[Github repository: PyScan](https://github.com/S4Plus/PyScan)
+
+[Tree-sitter official documentation](https://github.com/tree-sitter/py-tree-sitter)
+
