@@ -8,17 +8,17 @@
 
 ### Abstract
 
-本项目旨在分析目标语言`C/C++`的各项语言特性和机制在开源项目中的使用情况。在实现中将目标特性划分为了$\text{Template \& Modular Programming}$ 、$\text{Concurrency \&Multithreading}$、$\text{Memory Management}$、$\text{Exception Handling}$、$\text{Polymorphism \& Overloading}$、$\text{Reference Control}$、$\text{Function}$、$\text{Type System}$等八个类别，并在每一类别中选取了相应的若干特征项；继而利用我们完成的工具`CCScaner`对一批开源项目仓库进行了统计分析，得到统计结果。本项目将基于这一统计结果进行进一步的分析与讨论，以加深对这一经典语言的诸多特性的理解；并与现有的基于其他高级语言特性的相关研究结论进行对照，从而在新的角度认识不同语言特性在实际应用中的作用。
+本项目旨在分析目标语言`C/C++`的各项语言特性和机制在开源项目中的使用情况。在实现中将目标特性划分为了  Template & Modular Programming 、Concurrency & Multithreading、Memory Management、Exception Handling、Polymorphism & Overloading、Reference Control、Function、Type System  等八个类别，并在每一类别中选取了相应的若干特征项；继而利用我们完成的工具 CCScaner 对一批开源项目仓库进行了统计分析，得到统计结果。本项目将基于这一统计结果进行进一步的分析与讨论，以加深对这一经典语言的诸多特性的理解；并与现有的基于其他高级语言特性的相关研究结论进行对照，从而在新的角度认识不同语言特性在实际应用中的作用。
 
 ### Target
 
-1.  整理汇总`我们所关注的C/C++`语言特征，划分成为不同类别，并在每一类别中选取若干具有代表性的特征项
+1.  整理汇总我们所关注的 C/C++ 语言特征，划分成为不同类别，并在每一类别中选取若干具有代表性的特征项
 
-2.  基于我们完成的工具`CCScaner`分析`C/C++`的各项语言特征在开源项目中的使用情况，获得基础数据
+2.  基于我们完成的工具 CCScaner 分析 C/C++ 的各项语言特征在开源项目中的使用情况，获得基础数据
 
 3.  对得到的基础数据进行分析与讨论，关注：
 
-    1.  `C/C++`语言中的那些特性具有比较显著的影响，并得到大量应用
+    1.  C/C++ 语言中的那些特性具有比较显著的影响，并得到大量应用
     2.  不同领域语言使用者的特性使用倾向
 
     等等。
@@ -27,10 +27,7 @@
 
 
 
-
 ## Design
-
->   这一部分不涉及具体实现，主要侧重功能预期
 
 ### Tools for generating trees
 
@@ -113,7 +110,7 @@
 
 ### C/C++ Features
 
->   特征表格
+特征表格如下：
 
 |            Category            |        Language Features        |                    iIllustration/Utility                     | Reference denominator可参考分母 |
 | :----------------------------: | :-----------------------------: | :----------------------------------------------------------: | :-----------------------------: |
@@ -144,62 +141,30 @@
 |                                |              using              |                 创建类型别名，增加代码可读性                 |        变量定义数取对数         |
 |                                |            votatile             | 提醒编译器该变量易变，无需优化，系统总是重新从它所在的内存读取数据 |        变量定义数取对数         |
 |                                |            constexpr            |    指定变量或函数的值可以在常量表达式中出现，减少重复计算    |        变量定义数取对数         |
->   ==是否需要有说明？==
 
 
 
 ### Data set
 
->   ==仓库数据集的选取==
+我们希望能够综合考虑更多的应用场景，因而计划将收集到的仓库列表分成了 13 个大类，如下：
 
-|       领域       |             项目名称              |                           项目简介                           |
-| :--------------: | :-------------------------------: | :----------------------------------------------------------: |
-|     操作系统     |          torvalds/linux           |                      Linux 内核的源代码                      |
-|                  |          reactos/reactos          |           专注于兼容自Windows NT到XP的开源操作系统           |
-|     软件工程     |       facebook/react-native       |            Facebook 的开源框架，用以构建移动应用             |
-|                  |           cinder/Cinder           |            一套开源的、专为创意编程而设计的C++库             |
-|   AI与机器学习   |           opencv/opencv           |         开源计算机视觉库，其中包含了多种机器视觉算法         |
-|                  |       tensorflow/tensorflow       |                    Google 的深度学习框架                     |
-|                  |           apache/mxnet            |       深度学习框架，它让数据科学家可以构建深度学习模型       |
-|     加密系统     |          openssl/openssl          |         包含了加密算法和用于创建SSL和TLS协议的工具库         |
-|      数据库      |              rocksdb              |          C++构建的，针对快速存储场景的嵌入式数据库           |
-|                  |           sqlitebrowser           |                 浏览和操作SQLite数据库的工具                 |
-|                  |             typesense             |              快速、打字错误兼容的、开源搜索引擎              |
-|                  |               arrow               |            提供了一套用于处理大规模数据的开源工具            |
-|                  |              duckdb               |             是一个为分析查询优化的内存原生数据库             |
-|                  |               mysql               |                     关系型数据库管理系统                     |
-|     游戏开发     |             cocos2d-x             |                 一个用于构建2D游戏的开源框架                 |
-|                  |     CnC_Remastered_Collection     |                 《命令与征服》的开源游戏代码                 |
-|                  |               Hazel               |                      易用的游戏制作引擎                      |
-|                  |         godotengine/godot         |        全功能的开源游戏开发引擎，支持2D和3D游戏的开发        |
-|     金融领域     |        lballabio/QuantLib         |                  用于金融工程的自由/开源库                   |
-|                  |          bitcoin/bitcoin          |         Bitcoin核心维护团队官方维护的比特币项目源码          |
-|    嵌入式系统    | rogerclarkmelbourne/Arduino_STM32 |              用于在STM32基板上运行的Arduino适配              |
-|                  |            ETLCPP/etl             |                       一种嵌入式模板库                       |
-|     网络通信     |         chromium/chromium         |                    Chrome浏览器的开源项目                    |
-|                  |         mozilla/gecko-dev         |                      Firefox的开源项目                       |
-|                  |           webkit/webkit           | 开源的浏览器引擎，支持HTML和JavaScript，广泛应用于Apple的Safari浏览器以及很多其他的开源浏览器 |
-|     量子计算     |           eclipse/xacc            |              开源的，为量子加速器设计的编程框架              |
-|     编译系统     |         llvm/llvm-project         |  LLVM项目，包含了一套编译工具链，用于从多种语言生成机器代码  |
-|                  |          gcc-mirror/gcc           | 免费的编程语言编译器，支持如C、C++、Java、Fortran等多种编程语言，并可跨平台使用。 |
-|                  |           Kitware/CMake           |                    跨平台的自动化建构系统                    |
-|      自动化      |          FreeCAD/FreeCAD          |                      开源的3D 建模软件                       |
-|                  |        ros-planning/moveit        |                  用于机器人移动规划的工具集                  |
-|     编码技术     |       PointCloudLibrary/pcl       |               用于2D/3D 图像和点云处理的开源库               |
-|                  |            Kitware/VTK            |             用于处理和显示科学数据的开源软件系统             |
-| 开发者工具与插件 |               swift               |                     Apple 的开源编程语言                     |
-|                  |               json                |                       轻量级的数据格式                       |
-|                  |               grpc                |                Google 的开源远程过程调用系统                 |
-|                  |            flatbuffers            |               Google 的开源内存高效的序列化库                |
-|                  |              spdlog               |               极其快速、灵活且方便的C++日志库                |
-|                  |           foundationdb            |            分布式数据库，设计用于大规模的数据存储            |
-|                  |          incubator-weex           | 提供一个框架，使开发人员能够使用现代的Web开发经验来构建安卓、iOS以及web的高性能应用程序 |
+-   操作系统
+-   软件工程
+-   AI与机器学习
+-   加密系统
+-   游戏开发
+-   金融领域
+-   嵌入式系统
+-   网络通信
+-   量子计算
+-   编译系统
+-   自动化
+-   编码技术
+-   开发者工具与插件
 
-### Data analysis
+具体的项目条目将在实现环节逐步加入。
 
->   ==希望得到数据之后按照何种方式进行分析==（这里是设计不是最终结果）
 
->   待定
 
 ### CCScaner
 
@@ -415,34 +380,34 @@
 ├── README.md						: 仓库介绍
 ├── 05-language-features-usage-in-Cpp.md	: 小组工作介绍
 ├── build							: 从 tree-sitter 源码编译出针对目标语言的动态链接库
-│   └── my-languages.so				: 可为任意语言，本项目中为 c/c++
+│   └── my-languages.so				: 可为任意语言，本项目中为 c/c++
 ├── doc								: 文档
-│   ├── binding.pyi					: tree-sitter 的 python 绑定
-│   ├── Cppfeatures.md				: c/c++ 目标特性表，即本项目分析目标
-│   ├── grammar.js					:
-│   ├── Report.md					: 报告【当前文件】
-│   ├── scripts-examples.md			: 执行脚本的使用示例与相关说明
-│   ├── scripts.md					: 脚本的接口说明
-│   ├── sources.md					: tree-sitter 官方文档等参考信息
-│   └── storage-format.md			: 数据存储格式的统一定义
+│   ├── binding.pyi					: tree-sitter 的 python 绑定
+│   ├── Cppfeatures.md				: c/c++ 目标特性表，即本项目分析目标
+│   ├── grammar.js					:
+│   ├── Report.md					: 报告【当前文件】
+│   ├── scripts-examples.md			: 执行脚本的使用示例与相关说明
+│   ├── scripts.md					: 脚本的接口说明
+│   ├── sources.md					: tree-sitter 官方文档等参考信息
+│   └── storage-format.md			: 数据存储格式的统一定义
 ├── demo							: 测试文件，实质上是对抽象特征表条目的具象化描述
-│   ├── FEATURE-CLASS				: 特征大类
-│   │   ├── ......					: 大类下的具体条目
-│   │   └── feature-item.cpp
-│   └── ......						: 其他特征大类
+│   ├── FEATURE-CLASS				: 特征大类
+│   │   ├── ......					: 大类下的具体条目
+│   │   └── feature-item.cpp
+│   └── ......						: 其他特征大类
 ├── data							: 最终分析结果原始数据的存放位置
-│   ├── feature-tables				: 目标仓库的特征统计表
-│   │   ├── ......					: 以仓库名标识的特征统计表
-│   │   └── repo-name.csv
-│   ├── ......						: 每个仓库的具体信息条目做成压缩包的形式存放于此
-│   └── repo-name-res.zip
+│   ├── feature-tables				: 目标仓库的特征统计表
+│   │   ├── ......					: 以仓库名标识的特征统计表
+│   │   └── repo-name.csv
+│   ├── ......						: 每个仓库的具体信息条目做成压缩包的形式存放于此
+│   └── repo-name-res.zip
 ├── res								: 程序运行时的分析结果存放处，是运行时维护的共享区域
-│   ├── feature-tables				: 目标目录/文件的特征表存放处
-│   │   ├── ......					: 以目录/文件名称命名的特征统计表文件
-│   │   └── repo-name.csv
-│   └── repos-info					: 目录/文件具体信息条目存放处
-│       ├── ......					: 按照 特征大类-特征具体条目 标识的 csv 文件
-│       └── FEATURECLASS_featureItem.csv
+│   ├── feature-tables				: 目标目录/文件的特征表存放处
+│   │   ├── ......					: 以目录/文件名称命名的特征统计表文件
+│   │   └── repo-name.csv
+│   └── repos-info					: 目录/文件具体信息条目存放处
+│       ├── ......					: 按照 特征大类-特征具体条目 标识的 csv 文件
+│       └── FEATURECLASS_featureItem.csv
 ├── ccanalyser.py					: 基于 ccscaner 的结果进行综合分析，设计时预留了接口，但最后并未启用
 ├── ccscaner.py						: 项目核心，包含对每一个特征条目的处理逻辑，依赖于 cc
 ├── cctable.py						: 项目核心，定义了特征表的数据结构，并承担存储部分的工作
@@ -455,13 +420,73 @@
 
 ### How to analyze a repository?
 
+仓库核心脚本文件`ccscaner.py`、`test-file.sh`、`test-dir.sh`在同目录下的[`doc/scripts.md`](https://github.com/Starrybook/ccscaner/blob/master/doc/scripts.md)文件中有接口说明，并在同目录下的[`doc/scripts-examples.md`](https://github.com/Starrybook/ccscaner/blob/master/doc/scripts-examples.md)文件中有具体的使用说明与使用示例。处理过程则在前面有所介绍。
+
+两个文件的描述都相对详尽，故而这里就不再赘述。
+
 
 
 ## Data & Analysis
 
 ### Raw data
 
->   ==对不同仓库统计出来的原始数据==
+#### Repositories selected
+
+在设计部分提到过目标仓库大类的划分，这里是具体条目的填充：
+
+
+|       领域       |             项目名称              |                           项目简介                           |
+| :--------------: | :-------------------------------: | :----------------------------------------------------------: |
+|     操作系统     |          torvalds/linux           |                      Linux 内核的源代码                      |
+|                  |          reactos/reactos          |           专注于兼容自Windows NT到XP的开源操作系统           |
+|     软件工程     |       facebook/react-native       |            Facebook 的开源框架，用以构建移动应用             |
+|                  |           cinder/Cinder           |            一套开源的、专为创意编程而设计的C++库             |
+|   AI与机器学习   |           opencv/opencv           |         开源计算机视觉库，其中包含了多种机器视觉算法         |
+|                  |       tensorflow/tensorflow       |                    Google 的深度学习框架                     |
+|                  |           apache/mxnet            |       深度学习框架，它让数据科学家可以构建深度学习模型       |
+|     加密系统     |          openssl/openssl          |         包含了加密算法和用于创建SSL和TLS协议的工具库         |
+|      数据库      |              rocksdb              |          C++构建的，针对快速存储场景的嵌入式数据库           |
+|                  |           sqlitebrowser           |                 浏览和操作SQLite数据库的工具                 |
+|                  |             typesense             |              快速、打字错误兼容的、开源搜索引擎              |
+|                  |               arrow               |            提供了一套用于处理大规模数据的开源工具            |
+|                  |              duckdb               |             是一个为分析查询优化的内存原生数据库             |
+|                  |               mysql               |                     关系型数据库管理系统                     |
+|     游戏开发     |             cocos2d-x             |                 一个用于构建2D游戏的开源框架                 |
+|                  |     CnC_Remastered_Collection     |                 《命令与征服》的开源游戏代码                 |
+|                  |               Hazel               |                      易用的游戏制作引擎                      |
+|                  |         godotengine/godot         |        全功能的开源游戏开发引擎，支持2D和3D游戏的开发        |
+|     金融领域     |        lballabio/QuantLib         |                  用于金融工程的自由/开源库                   |
+|                  |          bitcoin/bitcoin          |         Bitcoin核心维护团队官方维护的比特币项目源码          |
+|    嵌入式系统    | rogerclarkmelbourne/Arduino_STM32 |              用于在STM32基板上运行的Arduino适配              |
+|                  |            ETLCPP/etl             |                       一种嵌入式模板库                       |
+|     网络通信     |         chromium/chromium         |                    Chrome浏览器的开源项目                    |
+|                  |         mozilla/gecko-dev         |                      Firefox的开源项目                       |
+|                  |           webkit/webkit           | 开源的浏览器引擎，支持HTML和JavaScript，广泛应用于Apple的Safari浏览器以及很多其他的开源浏览器 |
+|     量子计算     |           eclipse/xacc            |              开源的，为量子加速器设计的编程框架              |
+|     编译系统     |         llvm/llvm-project         |  LLVM项目，包含了一套编译工具链，用于从多种语言生成机器代码  |
+|                  |          gcc-mirror/gcc           | 免费的编程语言编译器，支持如C、C++、Java、Fortran等多种编程语言，并可跨平台使用。 |
+|                  |           Kitware/CMake           |                    跨平台的自动化建构系统                    |
+|      自动化      |          FreeCAD/FreeCAD          |                      开源的3D 建模软件                       |
+|                  |        ros-planning/moveit        |                  用于机器人移动规划的工具集                  |
+|     编码技术     |       PointCloudLibrary/pcl       |               用于2D/3D 图像和点云处理的开源库               |
+|                  |            Kitware/VTK            |             用于处理和显示科学数据的开源软件系统             |
+| 开发者工具与插件 |               swift               |                     Apple 的开源编程语言                     |
+|                  |               json                |                       轻量级的数据格式                       |
+|                  |               grpc                |                Google 的开源远程过程调用系统                 |
+|                  |            flatbuffers            |               Google 的开源内存高效的序列化库                |
+|                  |              spdlog               |               极其快速、灵活且方便的C++日志库                |
+|                  |           foundationdb            |            分布式数据库，设计用于大规模的数据存储            |
+|                  |          incubator-weex           | 提供一个框架，使开发人员能够使用现代的Web开发经验来构建安卓、iOS以及web的高性能应用程序 |
+
+#### Raw data
+
+每个数据表最终的特征统计表的存储位置位于 [`data/feature-tables/`](https://github.com/Starrybook/ccscaner/tree/master/data/feature-tables)目录下。
+
+最终的汇总统计表为[data/statistic.xlsx](https://github.com/Starrybook/ccscaner/blob/master/data/statistic.xlsx)。
+
+由于内容过于庞杂，这里难以一一列举。请查看对应链接。
+
+
 
 ### Analysis
 
@@ -488,4 +513,3 @@
 [Github repository: PyScan](https://github.com/S4Plus/PyScan)
 
 [Tree-sitter official documentation](https://github.com/tree-sitter/py-tree-sitter)
-
