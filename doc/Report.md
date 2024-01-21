@@ -325,7 +325,7 @@
 
 2.  讨论语言特性，选择关注点并进行汇总：
 
-    目标特征类：$\text{Template \& Modular Programming}$ 、$\text{Concurrency \&Multithreading}$、$\text{Memory Management}$、$\text{Exception Handling}$、$\text{Polymorphism \& Overloading}$、$\text{Reference Control}$、$\text{Function}$、$\text{Type System}$。
+    目标特征类：  Template & Modular Programming 、Concurrency & Multithreading、Memory Management、Exception Handling、Polymorphism & Overloading、Reference Control、Function、Type System  。
 
 3.  建立`CCScaner`的项目框架，选择树分析工具，完成外层数据处理脚本
 
@@ -420,8 +420,6 @@
 仓库核心脚本文件`ccscaner.py`、`test-file.sh`、`test-dir.sh`在同目录下的[`doc/scripts.md`](https://github.com/Starrybook/ccscaner/blob/master/doc/scripts.md)文件中有接口说明，并在同目录下的[`doc/scripts-examples.md`](https://github.com/Starrybook/ccscaner/blob/master/doc/scripts-examples.md)文件中有具体的使用说明与使用示例。处理过程则在前面有所介绍。
 
 两个文件的描述都相对详尽，故而这里就不再赘述。
-
-
 
 ## Data & Analysis
 
