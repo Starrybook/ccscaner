@@ -1,97 +1,52 @@
+--------------(已运行)-------------------
 1. 操作系统
 torvalds/linuxreactos/reactos 
-HelenOS/helenos 
-freebsd/freebsd-src 
 2. 软件工程
-react-native
-electron
-terminal
-imgui
-notepad-plus-plus
-qt/qtbase 
 facebook/react-native 
-dotnet/aspnetcore
 cinder/Cinder 
-pocoproject/poco 
 3. AI与机器学习
 opencv/opencv 
 tensorflow/tensorflow 
-pytorch/pytorch 
-Microsoft/CNTK
 apache/mxnet 
-BVLC/caffe
-protobuf
-gpt4all
-Paddle
-LightGBM
-mars
-caffe
 4. 加密系统
 openssl/openssl 
-gpg/gnupg
 5. 数据库
 rocksdb
 sqlitebrowser
 typesense
 arrow
 duckdb
-google/leveldb
-facebook/rocksdb 
-mysql/mysql-server 
-mysql/mysql-workbench 
-mongodb/mongo 
+mysql
+mysql
 6. 游戏开发
 cocos2d-x
 CnC_Remastered_Collection
 Hazel
 godotengine/godot 
-cocos2d/cocos2d-x 
-Aleph-One-Marathon/alephone 
-aws/lumberyard  
-tinyrenderer
-bullet3
-carla
 7. 金融领域
 lballabio/QuantLib 
 bitcoin/bitcoin 
 8. 嵌入式系统
-mozilla/DeepSpeech
 rogerclarkmelbourne/Arduino_STM32 
 ETLCPP/etl 
 9. 网络通信
 chromium/chromium 
 mozilla/gecko-dev 
 webkit/webkit 
-OtterBrowser/otter-browser
-aria2
-osquery
-trojan
-swoole-src
-rpcs3
 10. 量子计算
 eclipse/xacc 
 11. 编译系统
 llvm/llvm-project 
 gcc-mirror/gcc 
-mesonbuild/meson
-antlr/antlr4
-Kitware/CMak
-carbon-lang
-hhvm
+Kitware/CMake
 12. 自动化
 FreeCAD/FreeCAD  
 ros-planning/moveit
-orocos-toolchain/rtt
 13. 编码技术
-mozilla/video_codec_module
 PointCloudLibrary/pcl 
 Kitware/VTK 
 14. 图像处理与计算机视觉
 opencv
-tesseract
-openpose
-libfacedetection
-chineseocr_lite
 15. 开发者工具与插件
 swift
 json
@@ -100,45 +55,3 @@ flatbuffers
 spdlog
 foundationdb
 incubator-weex
-16. 系统应用与工具
-calculator
-TrafficMonitor
-ncnn
-TinyWebServer
-rapidjson
-TranslucentTB
-polybar
-abseil-cpp
-smartknob
-codon
-Atmosphere
-MaaAssistantArknights
-17. 教育与学习
-interview
-C-Plus-Plus
-modern-cpp-tutorial
-leetcode
-18. 其他
-xbmc
-arduino-esp32
-eos
-cosmos
-Hyprland
-protons
-duckdb
-winget-cli
-Waifu2x-Extension-GUI
-openalpr
-MyTinySTL
-or-tools
-ZLMediaKit
-brpc
-react-native-windows
-wkhtmltopdf
-Dragonfly
-MuseScore
-transmission
-Gource
-dxvk
-vnote
-cosmos
