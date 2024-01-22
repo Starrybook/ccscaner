@@ -8,9 +8,13 @@ Student teamwork repository of [USTC CS Compiler H lecture in fall 2023](https:/
 
 **[Repository here. (Public now)](https://github.com/Starrybook/ccscaner)**
 
-**[Report here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/Report.md)**
+**[Report.md here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/Report.md)**
+
+**[Report.pdf here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/Report.pdf)**
 
 **[How to use this tool. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/scripts-examples.md)**
+
+
 
 ## Team members
 
@@ -19,6 +23,8 @@ Student teamwork repository of [USTC CS Compiler H lecture in fall 2023](https:/
 | PB21061327 | 王志成 | [Starrybook](https://github.com/Starrybook) |
 | PB21111656 | 余淼   | [Ymm-cll](https://github.com/Ymm-cll)       |
 | PB21111682 | 龚劲铭 | [Gjmustc](https://github.com/Gjmustc)       |
+
+
 
 ## Abstract
 
@@ -34,7 +40,7 @@ Student teamwork repository of [USTC CS Compiler H lecture in fall 2023](https:/
 
 3.  对得到的基础数据进行分析与讨论，关注：
 
-    1.  `C/C++`语言中的那些特性具有比较显著的影响，并得到大量应用
+    1.  `C/C++`语言中的哪些特性具有比较显著的影响，并得到大量应用
     2.  不同领域语言使用者的特性使用倾向
 
     等等。

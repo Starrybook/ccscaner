@@ -357,11 +357,11 @@
 
 ## Division of labor & Contribution ratio
 
-| Student ID | Name   | Github id                                   | Work content               |
-| ---------- | ------ | ------------------------------------------- | -------------------------- |
-| PB21061327 | 王志成 | [Starrybook](https://github.com/Starrybook) | 项目框架搭建与部分识别函数 |
-| PB21111656 | 余淼   | [Ymm-cll](https://github.com/Ymm-cll)       | 部分识别函数与可视化表格 |
-| PB21111682 | 龚劲铭 | [Gjmustc](https://github.com/Gjmustc)       | C++特性及仓库分类统计分析，工具使用分析C++代码举例demo编写|
+| Student ID | Name   | Github id                                   | Work content               | Ratio        |
+| ---------- | ------ | ------------------------------------------- | -------------------------- | -------------------------- |
+| PB21061327 | 王志成 | [Starrybook](https://github.com/Starrybook) | 项目框架搭建与部分识别函数 | 33.3% |
+| PB21111656 | 余淼   | [Ymm-cll](https://github.com/Ymm-cll)       | 部分识别函数与可视化表格 | 33.3% |
+| PB21111682 | 龚劲铭 | [Gjmustc](https://github.com/Gjmustc)       | C++特性及仓库分类统计分析，工具使用分析C++代码举例demo编写| 33.3% |
 
 
 
