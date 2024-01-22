@@ -6,6 +6,8 @@
 
 **[Report.pdf here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/Report.pdf)**
 
+**[PPT here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/%E6%B1%87%E6%8A%A5%E5%B1%95%E7%A4%BAppt.pptx)**
+
 **[How to use this tool. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/scripts-examples.md)**
 
 

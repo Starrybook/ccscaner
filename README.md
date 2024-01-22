@@ -2,7 +2,11 @@
 
 Student teamwork repository of [USTC CS Compiler H lecture in fall 2023](https://github.com/ustc-compiler/2023fall-CS-teamworks).
 
+# Anyone interested in this project is welcome to refer to our work!
 
+
+
+****
 
 # An Empirical Study of Language features usage in C/C++
 
@@ -11,6 +15,8 @@ Student teamwork repository of [USTC CS Compiler H lecture in fall 2023](https:/
 **[Report.md here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/Report.md)**
 
 **[Report.pdf here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/Report.pdf)**
+
+**[PPT here. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/%E6%B1%87%E6%8A%A5%E5%B1%95%E7%A4%BAppt.pptx)**
 
 **[How to use this tool. (under ./doc/)](https://github.com/Starrybook/ccscaner/blob/master/doc/scripts-examples.md)**
 
