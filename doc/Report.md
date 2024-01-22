@@ -360,7 +360,7 @@
 | Student ID | Name   | Github id                                   | Work content               |
 | ---------- | ------ | ------------------------------------------- | -------------------------- |
 | PB21061327 | 王志成 | [Starrybook](https://github.com/Starrybook) | 项目框架搭建与部分识别函数 |
-| PB21111656 | 余淼   | [Ymm-cll](https://github.com/Ymm-cll)       |                            |
+| PB21111656 | 余淼   | [Ymm-cll](https://github.com/Ymm-cll)       | 部分识别函数与可视化表格 |
 | PB21111682 | 龚劲铭 | [Gjmustc](https://github.com/Gjmustc)       |                            |
 
 
